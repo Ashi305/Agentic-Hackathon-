@@ -1,0 +1,2114 @@
+[
+  {
+    "report": {
+      "id": "NM-2024-013",
+      "timestamp": "2026-09-15 22:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Overhead Crane Bay 1 - Coil Unloading Bay",
+      "reporter_role": "Rigger / Slinger",
+      "raw_text": "While rigging a 14,000 lb steel slit coil using a synthetic round sling, rigger noticed severe friction burn and outer jacket fraying exposing inner core yarn strands on the sling choker point. Corner softeners (cut protectors) had not been placed over the sharp sheared 90-degree steel edges of the coil. Sling was under 70% rated tension when noticed.",
+      "equipment_involved": "20-Ton Overhead Bridge Crane CR-01",
+      "environmental_factors": "Industrial shop floor, oily surface",
+      "immediate_action_taken": "Lowered coil back into cradle and tagged out synthetic sling"
+    },
+    "extraction": {
+      "report_id": "NM-2024-013",
+      "primary_hazard": "Damaged Synthetic Lifting Sling Rigged Over Unprotected Sharp Steel Edge",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Missing corner edge protectors/softeners",
+        "Severely frayed outer protective cover",
+        "Heavy suspended dynamic load"
+      ],
+      "affected_assets": [
+        "Rigger",
+        "Coil Unloading Crew"
+      ],
+      "failed_safeguards": [
+        "Pre-lift sling inspection",
+        "Edge protection protocol"
+      ],
+      "recommended_mitigation": "Destroy and dispose damaged sling; mandate magnetic polyurethane corner protectors on all coil lifts."
+    },
+    "assessment": {
+      "report_id": "NM-2024-013",
+      "risk_level": "High",
+      "risk_score": 9.4,
+      "confidence": 0.9,
+      "rationale": "Suspended multi-ton load with degraded rigging over sharp edge. Direct precursor to catastrophic load drop and crushing fatality.",
+      "osha_citations": [
+        "OSHA 1910.184 (Slings)",
+        "ASME B30.9 (Slings and Rigging Standards)"
+      ],
+      "precursor_severity_signals": [
+        "Fatal Precursor",
+        "Rigging Failure Risk",
+        "Suspended Heavy Load"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-026",
+      "timestamp": "2026-09-13 12:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Structural Beam Welding Bay #3",
+      "reporter_role": "Structural Welder",
+      "raw_text": "Welder initiated SMAW arc on I-beam fixture. Frayed copper ground cable with split rubber casing made contact with adjacent 100 PSI compressed air supply line, creating a localized high-amp flash and burning pinhole through the air manifold hose.",
+      "equipment_involved": "Miller 400A Mig/Tig Welder",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-026",
+      "primary_hazard": "Damaged Ground Clamp Cable Causing Arc Strike on Pressurized Gas Line",
+      "hazard_category": "Electrical / Arc Flash",
+      "precursor_events": [
+        "Split insulation on welding ground return lead",
+        "Routing welding leads across gas manifolds"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Miller 400A Mig/Tig Welder"
+      ],
+      "failed_safeguards": [
+        "Pre-work hot work lead inspection",
+        "Separation of electrical and pneumatic lines"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-026",
+      "risk_level": "Medium",
+      "risk_score": 6.5,
+      "confidence": 0.96,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Electrical / Arc Flash.",
+      "osha_citations": [
+        "OSHA 1910.252 (General Requirements - Welding, Cutting and Brazing)"
+      ],
+      "precursor_severity_signals": [
+        "Arc Strike Precursor",
+        "Damaged Cable Insulation"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-032",
+      "timestamp": "2026-09-13 02:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Plasma CNC Cutting Table 3 #9",
+      "reporter_role": "CNC Operator",
+      "raw_text": "During heavy plate plasma beveling, molten slag accumulated on dry scrap plate edge due to low water table level. Minor flame flare ignited pallet wooden base stored 2 feet from table edge. Flame extinguished with CO2 extinguisher in under 10 seconds.",
+      "equipment_involved": "Koike 5-Axis CNC Plasma Burner",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-032",
+      "primary_hazard": "Water Table Sludge Build-up Blocking Emergency Slag Extraction",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Low water table level",
+        "Combustible wood pallet stored inside 5-foot hot work perimeter"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Koike 5-Axis CNC Plasma Burner"
+      ],
+      "failed_safeguards": [
+        "35-foot hot work combustible clearance standard",
+        "Water quench table"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-032",
+      "risk_level": "Low",
+      "risk_score": 3.9,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.252(a) (Fire Prevention in Welding)"
+      ],
+      "precursor_severity_signals": [
+        "Hot Work Violation",
+        "Housekeeping Hazard"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-007",
+      "timestamp": "2026-09-10 03:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Robotic Welding Cell 4",
+      "reporter_role": "Welding Inspector",
+      "raw_text": "Maintenance technician entered robot enclosure to clear weld wire bird-nest while interlock access gate was keyed open with an override magnetic bypass wedge. Robot was paused in hold mode rather than zero-energy state (LOTO). While mechanic was untangling wire nozzle, teach pendant was nudged on console table, causing robot arm to jog 15cm toward mechanic's shoulder before halting on torque limit.",
+      "equipment_involved": "Fanuc 6-Axis Arc Mate Robot",
+      "environmental_factors": "Darkened arc curtain enclosure, ambient shop noise",
+      "immediate_action_taken": "Exited cell and reported safety circuit bypass to engineering lead"
+    },
+    "extraction": {
+      "report_id": "NM-2024-007",
+      "primary_hazard": "Unauthorized Defeat of Robot Cell Safety Interlock During Live Clearing",
+      "hazard_category": "Mechanical / Pinch / Struck-by",
+      "precursor_events": [
+        "Magnetic bypass key used on safety gate",
+        "Failure to isolate energy via Lockout/Tagout (LOTO)",
+        "Teach pendant left in active mode"
+      ],
+      "affected_assets": [
+        "Maintenance Technician",
+        "Robotic Arm"
+      ],
+      "failed_safeguards": [
+        "Dual-channel gate interlock switch",
+        "Lockout/Tagout policy (LOTO)"
+      ],
+      "recommended_mitigation": "Confiscate magnetic bypass shunts; institute trapped-key interlock system (Kirk key) requiring physical lock removal before entry."
+    },
+    "assessment": {
+      "report_id": "NM-2024-007",
+      "risk_level": "High",
+      "risk_score": 9.5,
+      "confidence": 0.95,
+      "rationale": "Intentional bypass of safety interlock in automated machinery space. High-severity precursor to crushing or struck-by fatality.",
+      "osha_citations": [
+        "OSHA 1910.147 (The Control of Hazardous Energy - Lockout/Tagout)",
+        "ANSI/RIA R15.06 (Industrial Robots Safety)"
+      ],
+      "precursor_severity_signals": [
+        "Fatal Precursor",
+        "LOTO Violation",
+        "Interlock Tampering"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-030",
+      "timestamp": "2026-09-06 15:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Semiconductor Cleanroom Assembly",
+      "location_specific": "Wet Etch Bench WB-04 #12",
+      "reporter_role": "Etch Specialist",
+      "raw_text": "During weekly first-aid audit at hydrofluoric acid (HF) wet bench, operator discovered emergency calcium gluconate gel tube in the wall dispenser box was expired by 14 months and crusty at seal. Eye-wash bottle seal had also been broken.",
+      "equipment_involved": "Hydrofluoric Acid Bath Unit",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-030",
+      "primary_hazard": "Expired Calcium Gluconate Antidote Kit at HF Acid Station",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Expired medical antidote in critical chemical zone",
+        "Unsealed secondary emergency eye wash"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Hydrofluoric Acid Bath Unit"
+      ],
+      "failed_safeguards": [
+        "Medical emergency antidote availability",
+        "Weekly safety equipment inspection checklist"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-030",
+      "risk_level": "Medium",
+      "risk_score": 6.7,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.1200",
+        "OSHA 1910.151 (Medical Services and First Aid)"
+      ],
+      "precursor_severity_signals": [
+        "Chemical Safety Failure",
+        "Emergency Readiness Deficit"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-022",
+      "timestamp": "2026-09-02 02:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Semiconductor Cleanroom Assembly",
+      "location_specific": "Wet Etch Bench WB-04 #4",
+      "reporter_role": "Etch Specialist",
+      "raw_text": "During weekly first-aid audit at hydrofluoric acid (HF) wet bench, operator discovered emergency calcium gluconate gel tube in the wall dispenser box was expired by 14 months and crusty at seal. Eye-wash bottle seal had also been broken.",
+      "equipment_involved": "Hydrofluoric Acid Bath Unit",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-022",
+      "primary_hazard": "Expired Calcium Gluconate Antidote Kit at HF Acid Station",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Expired medical antidote in critical chemical zone",
+        "Unsealed secondary emergency eye wash"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Hydrofluoric Acid Bath Unit"
+      ],
+      "failed_safeguards": [
+        "Medical emergency antidote availability",
+        "Weekly safety equipment inspection checklist"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-022",
+      "risk_level": "Medium",
+      "risk_score": 6.7,
+      "confidence": 0.9,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.1200",
+        "OSHA 1910.151 (Medical Services and First Aid)"
+      ],
+      "precursor_severity_signals": [
+        "Chemical Safety Failure",
+        "Emergency Readiness Deficit"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-011",
+      "timestamp": "2026-08-28 12:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Quality Control Wet Lab 2",
+      "reporter_role": "Lab Chemist",
+      "raw_text": "Chemist was preparing aqua regia solution (nitric and hydrochloric acid) inside Fume Hood 4. Magnehelic differential pressure gauge showed low face velocity (55 FPM vs required 100 FPM), and low airflow alarm had been taped over with masking tape to silence the beeping. Faint pungent chlorine-like odor was detected outside sash before chemist noticed silenced alarm panel.",
+      "equipment_involved": "Fume Hood #4",
+      "environmental_factors": "Fume hood sash partially raised",
+      "immediate_action_taken": "Closed sash completely and recalibrated airflow monitor"
+    },
+    "extraction": {
+      "report_id": "NM-2024-011",
+      "primary_hazard": "Compromised Fume Hood Face Velocity with Silenced Alarm During Toxic Acid Digestion",
+      "hazard_category": "Atmospheric / Confined Space",
+      "precursor_events": [
+        "Silenced/taped over safety acoustic alarm",
+        "Inadequate face velocity ventilation",
+        "Working with fuming toxic acid combination"
+      ],
+      "affected_assets": [
+        "Lab Chemist",
+        "QC Lab Staff"
+      ],
+      "failed_safeguards": [
+        "Exhaust airflow velocity threshold",
+        "Audible alarm annunciator"
+      ],
+      "recommended_mitigation": "Hardwire airflow alarms with supervisory tamper alarms; lock out hood until exhaust blower belt is serviced."
+    },
+    "assessment": {
+      "report_id": "NM-2024-011",
+      "risk_level": "High",
+      "risk_score": 8.7,
+      "confidence": 0.88,
+      "rationale": "Toxic gas inhalation hazard combined with intentional silencing of primary safety warning device.",
+      "osha_citations": [
+        "OSHA 1910.1450 (Occupational Exposure to Hazardous Chemicals in Laboratories)"
+      ],
+      "precursor_severity_signals": [
+        "Toxic Gas Precursor",
+        "Alarm Bypassed",
+        "Chemical Exposure Hazard"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-027",
+      "timestamp": "2026-08-25 17:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Centrifuge Room 1 #8",
+      "reporter_role": "Process Tech",
+      "raw_text": "During solvent-wetted solids discharge from basket centrifuge, nitrogen inerting purge valve pressure dipped below 0.5 inches water column setpoint. Low N2 pressure interlock failed to trip drive motor, allowing spinning basket to continue discharging in presence of ambient oxygen and flammable cyclohexane vapors.",
+      "equipment_involved": "Basket Centrifuge CF-101",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-027",
+      "primary_hazard": "Nitrogen Blanketing Depressurization on Flammable Cake Discharge",
+      "hazard_category": "Process Safety / Pressure Excursion",
+      "precursor_events": [
+        "Nitrogen supply pressure excursion",
+        "Failed safety interlock trip circuit",
+        "Flammable solvent vapor concentration"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Basket Centrifuge CF-101"
+      ],
+      "failed_safeguards": [
+        "Inert gas interlock switch",
+        "LEL vapor sensor"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-027",
+      "risk_level": "High",
+      "risk_score": 9.5,
+      "confidence": 0.97,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Process Safety / Pressure Excursion.",
+      "osha_citations": [
+        "OSHA 1910.119 (Process Safety Management of Highly Hazardous Chemicals)",
+        "NFPA 69 (Explosion Prevention Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Explosion Precursor",
+        "PSM Critical Failure",
+        "Loss of Inerting"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-008",
+      "timestamp": "2026-08-24 16:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Fleet Loading Dock & Yard Operations",
+      "location_specific": "Dock Door 8 - Trailer Staging",
+      "reporter_role": "Material Handler",
+      "raw_text": "Pallet truck driver drove front wheels onto dock plate inside trailer when trailer creep occurred, pulling trailer 6 inches away from dock bumper. The automated vehicle restraint (dock lock) had failed to engage due to accumulated mud on the trailer ICC bar, but the indoor dock control panel showed a false green 'Restrained' light. Forklift mast jarred violently across the expanding gap before driver reversed back onto concrete warehouse slab.",
+      "equipment_involved": "Dock Leveler DL-08 & 53ft Dry Van Trailer",
+      "environmental_factors": "Heavy rain, wet concrete yard ramp",
+      "immediate_action_taken": "Halted forklift entry; engaged manual steel wheel chocks and re-hooked trailer restraint"
+    },
+    "extraction": {
+      "report_id": "NM-2024-008",
+      "primary_hazard": "Trailer Creep with False Positive Dock Lock Sensor",
+      "hazard_category": "Mechanical / Pinch / Struck-by",
+      "precursor_events": [
+        "Debris on trailer bumper bar blocking lock jaw",
+        "Faulty microswitch indicator giving false safe signal",
+        "Absence of secondary wheel chocks"
+      ],
+      "affected_assets": [
+        "Pallet Truck Operator",
+        "Dock Equipment"
+      ],
+      "failed_safeguards": [
+        "Automated trailer restraint system",
+        "Secondary wheel chocking protocol"
+      ],
+      "recommended_mitigation": "Service dock lock proximity sensors; enforce mandatory manual wheel chocks alongside mechanical lock."
+    },
+    "assessment": {
+      "report_id": "NM-2024-008",
+      "risk_level": "High",
+      "risk_score": 9.2,
+      "confidence": 0.89,
+      "rationale": "Dock separation while powered mobile equipment is entering trailer. Extreme tip-over and catastrophic fall hazard.",
+      "osha_citations": [
+        "OSHA 1910.178(k)(1) (Trucks and Railroad Cars Loading Safety)"
+      ],
+      "precursor_severity_signals": [
+        "Dock Separation Precursor",
+        "Sensor Failure",
+        "Forklift Tip-Over Risk"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-010",
+      "timestamp": "2026-08-24 09:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Packaging Staging Area - East Wall",
+      "reporter_role": "Packer",
+      "raw_text": "Operator was guiding corrugated boxes into automatic tape applicator when tape cutter blade stuck in extended position. Operator reached fingers within 1 inch of serrated spring-loaded blade to yank tangled packing tape. Guard cover hinge was broken and taped down with duct tape, removing physical barrier.",
+      "equipment_involved": "Manual Carton Sealing Machine",
+      "environmental_factors": "Normal warehouse lighting, dry",
+      "immediate_action_taken": "Cleaned tape debris and unplugged unit for maintenance"
+    },
+    "extraction": {
+      "report_id": "NM-2024-010",
+      "primary_hazard": "Exposed Serrated Cutter Blade on Packaging Machine",
+      "hazard_category": "Mechanical / Pinch / Struck-by",
+      "precursor_events": [
+        "Defeated/broken finger guard held by duct tape",
+        "Reaching into moving blade path to clear jam"
+      ],
+      "affected_assets": [
+        "Packer"
+      ],
+      "failed_safeguards": [
+        "Interlocked finger blade guard",
+        "Jam clearing tool/tongs"
+      ],
+      "recommended_mitigation": "Replace blade guard with interlocked safety hood; provide non-conductive clearing picks."
+    },
+    "assessment": {
+      "report_id": "NM-2024-010",
+      "risk_level": "Medium",
+      "risk_score": 6.2,
+      "confidence": 0.94,
+      "rationale": "Laceration hazard with missing machine guard. Moderate injury potential without bone/amputation severity.",
+      "osha_citations": [
+        "OSHA 1910.212 (Machine Guarding)"
+      ],
+      "precursor_severity_signals": [
+        "Guarding Defect",
+        "Laceration Precursor"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-017",
+      "timestamp": "2026-08-23 01:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Pallet Racking Bay #4",
+      "reporter_role": "Reach Truck Driver",
+      "raw_text": "Operator observed heavy steel pallet (weight tag: 3,200 lbs) placed onto wire mesh deck rated for 2,500 lbs at rack level 4 (24 feet elevation). Wire decking had visible downward deflection of 1.5 inches and corner weld was cracked. Pallet had begun tilting slightly towards pedestrian picking lane.",
+      "equipment_involved": "Crown Reach Truck RR-5700 & Tier-4 Racking",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-017",
+      "primary_hazard": "Overloaded Wire Mesh Decking on High-Tier Pallet Rack",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Exceeded rack shelf weight rating",
+        "Cracked wire deck weld",
+        "Improper weight tag auditing"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Crown Reach Truck RR-5700 & Tier-4 Racking"
+      ],
+      "failed_safeguards": [
+        "Rack load rating signage",
+        "Forklift scale verification"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-017",
+      "risk_level": "High",
+      "risk_score": 8.8,
+      "confidence": 0.94,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.176 (Handling Materials - General)"
+      ],
+      "precursor_severity_signals": [
+        "Falling Object Precursor",
+        "Structural Racking Defect"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-015",
+      "timestamp": "2026-08-22 09:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Semiconductor Cleanroom Assembly",
+      "location_specific": "Chemical Mechanical Polishing (CMP) Slurry Room",
+      "reporter_role": "Process Engineer",
+      "raw_text": "During filter replacement on colloidal silica polishing slurry line, small drip (approx 50 drops/min) developed at quick-disconnect coupling. Slurry dried into extremely slick glassy residue on epoxy flooring. Operator experienced minor foot slip while stepping over pipe bridge, held railing.",
+      "equipment_involved": "Silica Slurry Day Tank T-301",
+      "environmental_factors": "Damp floor, white protective bunny suit",
+      "immediate_action_taken": "Tightened union fitting and placed absorbent boom around spill"
+    },
+    "extraction": {
+      "report_id": "NM-2024-015",
+      "primary_hazard": "Colloidal Slurry Drip Creating High Slip Floor Condition",
+      "hazard_category": "Slip / Trip / Surface Hazard",
+      "precursor_events": [
+        "Worn Viton O-ring in quick-disconnect coupling",
+        "Dried silica residue forming slippery film"
+      ],
+      "affected_assets": [
+        "Process Engineer"
+      ],
+      "failed_safeguards": [
+        "Drip collection tray",
+        "O-ring scheduled PM"
+      ],
+      "recommended_mitigation": "Replace couplings with double-shutoff dry-break fittings; install drip catch pans."
+    },
+    "assessment": {
+      "report_id": "NM-2024-015",
+      "risk_level": "Low",
+      "risk_score": 3.2,
+      "confidence": 0.97,
+      "rationale": "Low chemical toxicity (pH neutral silica), minor slip without fall, fast cleanup.",
+      "osha_citations": [
+        "OSHA 1910.22 (Walking-Working Surfaces)"
+      ],
+      "precursor_severity_signals": [
+        "Slip Risk",
+        "Minor Chemical Leak"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-033",
+      "timestamp": "2026-08-22 06:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Pallet Racking Bay #11",
+      "reporter_role": "Reach Truck Driver",
+      "raw_text": "Operator observed heavy steel pallet (weight tag: 3,200 lbs) placed onto wire mesh deck rated for 2,500 lbs at rack level 4 (24 feet elevation). Wire decking had visible downward deflection of 1.5 inches and corner weld was cracked. Pallet had begun tilting slightly towards pedestrian picking lane.",
+      "equipment_involved": "Crown Reach Truck RR-5700 & Tier-4 Racking",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-033",
+      "primary_hazard": "Overloaded Wire Mesh Decking on High-Tier Pallet Rack",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Exceeded rack shelf weight rating",
+        "Cracked wire deck weld",
+        "Improper weight tag auditing"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Crown Reach Truck RR-5700 & Tier-4 Racking"
+      ],
+      "failed_safeguards": [
+        "Rack load rating signage",
+        "Forklift scale verification"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-033",
+      "risk_level": "High",
+      "risk_score": 8.8,
+      "confidence": 0.91,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.176 (Handling Materials - General)"
+      ],
+      "precursor_severity_signals": [
+        "Falling Object Precursor",
+        "Structural Racking Defect"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-023",
+      "timestamp": "2026-08-21 09:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Battery Charging Station B #12",
+      "reporter_role": "Battery Tech",
+      "raw_text": "Technician checking forklift battery electrolyte levels noticed plumbed emergency eye-wash station nozzles had accumulated battery charging acid-mist residue due to missing yellow pop-off dust caps. Testing station sprayed discolored water for first 6 seconds.",
+      "equipment_involved": "Lead-Acid Battery Changer Crane",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-023",
+      "primary_hazard": "Defective Eyewash Eyecup Missing Dust Caps in Acid Battery Room",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Missing dust caps on emergency eyewash",
+        "Acid mist deposition on plumbing orifices"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Lead-Acid Battery Changer Crane"
+      ],
+      "failed_safeguards": [
+        "ANSI Z358.1 Weekly flush protocol",
+        "Protective dust caps"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-023",
+      "risk_level": "Low",
+      "risk_score": 4.1,
+      "confidence": 0.91,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.151(c) (Eyewash Facilities)",
+        "ANSI Z358.1"
+      ],
+      "precursor_severity_signals": [
+        "First Aid Defect",
+        "Maintenance Lag"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-012",
+      "timestamp": "2026-08-17 21:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Fleet Loading Dock & Yard Operations",
+      "location_specific": "Trailer Parking Row D",
+      "reporter_role": "Yard Hostler Driver",
+      "raw_text": "While stepping down from the cab ladder of Yard Jockey #12, hostler slipped on black ice coating the lower steel rung. Driver grabbed the hand grab-rail with both gloved hands, preventing a backward fall onto the frozen asphalt. The cab exterior access light was burnt out, making the iced step invisible.",
+      "equipment_involved": "Ottawa T2 Yard Jockey Truck #12",
+      "environmental_factors": "Night shift, heavy snow flurries, ice patches",
+      "immediate_action_taken": "Applied salt spreading and notified yard supervisor"
+    },
+    "extraction": {
+      "report_id": "NM-2024-012",
+      "primary_hazard": "Iced Cab Step and Inoperative Exterior Step Light on Yard Truck",
+      "hazard_category": "Slip / Trip / Surface Hazard",
+      "precursor_events": [
+        "Burnt-out entry illumination bulb",
+        "Ice accumulation on non-slip perforated rung"
+      ],
+      "affected_assets": [
+        "Yard Hostler Driver"
+      ],
+      "failed_safeguards": [
+        "Three-point contact protocol (barely maintained)",
+        "Yard winterization salting"
+      ],
+      "recommended_mitigation": "Replace step lights with weatherproof LEDs; apply high-traction rubberized rung grips."
+    },
+    "assessment": {
+      "report_id": "NM-2024-012",
+      "risk_level": "Low",
+      "risk_score": 3.8,
+      "confidence": 0.89,
+      "rationale": "Slip event without fall due to proper three-point contact maintained. Low potential for severe permanent harm.",
+      "osha_citations": [
+        "OSHA 1910.22 (Walking-Working Surfaces)"
+      ],
+      "precursor_severity_signals": [
+        "Slip Incident",
+        "Poor Lighting"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-035",
+      "timestamp": "2026-08-16 10:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Centrifuge Room 1 #8",
+      "reporter_role": "Process Tech",
+      "raw_text": "During solvent-wetted solids discharge from basket centrifuge, nitrogen inerting purge valve pressure dipped below 0.5 inches water column setpoint. Low N2 pressure interlock failed to trip drive motor, allowing spinning basket to continue discharging in presence of ambient oxygen and flammable cyclohexane vapors.",
+      "equipment_involved": "Basket Centrifuge CF-101",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-035",
+      "primary_hazard": "Nitrogen Blanketing Depressurization on Flammable Cake Discharge",
+      "hazard_category": "Process Safety / Pressure Excursion",
+      "precursor_events": [
+        "Nitrogen supply pressure excursion",
+        "Failed safety interlock trip circuit",
+        "Flammable solvent vapor concentration"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Basket Centrifuge CF-101"
+      ],
+      "failed_safeguards": [
+        "Inert gas interlock switch",
+        "LEL vapor sensor"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-035",
+      "risk_level": "High",
+      "risk_score": 9.5,
+      "confidence": 0.91,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Process Safety / Pressure Excursion.",
+      "osha_citations": [
+        "OSHA 1910.119 (Process Safety Management of Highly Hazardous Chemicals)",
+        "NFPA 69 (Explosion Prevention Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Explosion Precursor",
+        "PSM Critical Failure",
+        "Loss of Inerting"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-024",
+      "timestamp": "2026-08-10 16:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Plasma CNC Cutting Table 3 #8",
+      "reporter_role": "CNC Operator",
+      "raw_text": "During heavy plate plasma beveling, molten slag accumulated on dry scrap plate edge due to low water table level. Minor flame flare ignited pallet wooden base stored 2 feet from table edge. Flame extinguished with CO2 extinguisher in under 10 seconds.",
+      "equipment_involved": "Koike 5-Axis CNC Plasma Burner",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-024",
+      "primary_hazard": "Water Table Sludge Build-up Blocking Emergency Slag Extraction",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Low water table level",
+        "Combustible wood pallet stored inside 5-foot hot work perimeter"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Koike 5-Axis CNC Plasma Burner"
+      ],
+      "failed_safeguards": [
+        "35-foot hot work combustible clearance standard",
+        "Water quench table"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-024",
+      "risk_level": "Low",
+      "risk_score": 3.9,
+      "confidence": 0.94,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.252(a) (Fire Prevention in Welding)"
+      ],
+      "precursor_severity_signals": [
+        "Hot Work Violation",
+        "Housekeeping Hazard"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-005",
+      "timestamp": "2026-08-09 16:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Bulk Solvent Storage Tank Farm - Dike B",
+      "reporter_role": "Offloading Specialist",
+      "raw_text": "Prior to starting bulk unloading of 5,000 gallons of toluene from rail car to Tank 4, operator noticed ground-proving monitor light was flickering amber instead of steady green. Visual inspection revealed ground clamp was attached over thick layer of rusted paint on truck chassis rather than bare metal earth point. Static charge during solvent transfer could have sparked flammable vapor ignition at vent port.",
+      "equipment_involved": "Toluene Tanker Truck Tank-T04",
+      "environmental_factors": "Outdoor transfer, sunny, dry, high static potential",
+      "immediate_action_taken": "Suspended transfer immediately and clamped grounding cable to certified copper busbar"
+    },
+    "extraction": {
+      "report_id": "NM-2024-005",
+      "primary_hazard": "Improper Static Grounding During Flammable Solvent Offloading",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Grounding clamp clipped to insulated/painted metal",
+        "Failure to verify zero-ohm continuity prior to hose connection"
+      ],
+      "affected_assets": [
+        "Tanker Truck",
+        "Bulk Farm Tank 4",
+        "Transfer Depot"
+      ],
+      "failed_safeguards": [
+        "Automated pump interlock bypass",
+        "Standard grounding continuity check SOP"
+      ],
+      "recommended_mitigation": "Install intrinsically safe interlocked grounding clamps that inhibit pump startup until continuity <= 10 ohms."
+    },
+    "assessment": {
+      "report_id": "NM-2024-005",
+      "risk_level": "High",
+      "risk_score": 9.4,
+      "confidence": 0.94,
+      "rationale": "Class IB flammable liquid transfer with ineffective static grounding. Direct precursor to major fire/explosion and mass casualty.",
+      "osha_citations": [
+        "OSHA 1910.106 (Flammable Liquids)",
+        "NFPA 77 (Recommended Practice on Static Electricity)"
+      ],
+      "precursor_severity_signals": [
+        "Explosion Precursor",
+        "Static Discharge Risk",
+        "Flammable Vapor Zone"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-016",
+      "timestamp": "2026-08-09 03:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Plasma CNC Cutting Table 3 #1",
+      "reporter_role": "CNC Operator",
+      "raw_text": "During heavy plate plasma beveling, molten slag accumulated on dry scrap plate edge due to low water table level. Minor flame flare ignited pallet wooden base stored 2 feet from table edge. Flame extinguished with CO2 extinguisher in under 10 seconds.",
+      "equipment_involved": "Koike 5-Axis CNC Plasma Burner",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-016",
+      "primary_hazard": "Water Table Sludge Build-up Blocking Emergency Slag Extraction",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Low water table level",
+        "Combustible wood pallet stored inside 5-foot hot work perimeter"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Koike 5-Axis CNC Plasma Burner"
+      ],
+      "failed_safeguards": [
+        "35-foot hot work combustible clearance standard",
+        "Water quench table"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-016",
+      "risk_level": "Low",
+      "risk_score": 3.9,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.252(a) (Fire Prevention in Welding)"
+      ],
+      "precursor_severity_signals": [
+        "Hot Work Violation",
+        "Housekeeping Hazard"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-002",
+      "timestamp": "2026-08-07 14:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Aisle 14 - Cross-dock Intersection",
+      "reporter_role": "Order Picker",
+      "raw_text": "Order picker walking out of Aisle 14 with hand truck was almost struck by Forklift #7 rounding the blind corner at speed. The ceiling-mounted parabolic convex mirror was twisted upwards and covered in dust, obscuring sightlines. The forklift driver's blue safety halo light was functioning, but the automatic horn interlock failed to sound upon entering the pedestrian intersection. Braking distance missed the pedestrian by less than 18 inches.",
+      "equipment_involved": "Toyota 3-Wheel Electric Forklift #7",
+      "environmental_factors": "Dry floor, high ambient noise from automated sorter",
+      "immediate_action_taken": "Pedestrian stepped back against racking; forklift driver applied emergency brake"
+    },
+    "extraction": {
+      "report_id": "NM-2024-002",
+      "primary_hazard": "Blind Intersection Forklift-Pedestrian Near Collision",
+      "hazard_category": "Mechanical / Pinch / Struck-by",
+      "precursor_events": [
+        "Misaligned/dirty convex intersection mirror",
+        "Audible horn interlock malfunction",
+        "Excessive speed approaching pedestrian crossing"
+      ],
+      "affected_assets": [
+        "Order Picker",
+        "Forklift Operator"
+      ],
+      "failed_safeguards": [
+        "Defective crossing horn",
+        "Misdirected optical mirror"
+      ],
+      "recommended_mitigation": "Reposition and lock parabolic mirrors; install automated radar-activated crossing gates and speed limiters."
+    },
+    "assessment": {
+      "report_id": "NM-2024-002",
+      "risk_level": "High",
+      "risk_score": 9.1,
+      "confidence": 0.93,
+      "rationale": "High-speed mobile equipment near-miss with pedestrian in blind corridor; missing dual auditory/visual safeguards. Immediate severe crush/fatality precursor.",
+      "osha_citations": [
+        "OSHA 1910.178 (Powered Industrial Trucks)"
+      ],
+      "precursor_severity_signals": [
+        "Mobile Equipment Precursor",
+        "Blind Corner",
+        "Sub-2-Foot Near Miss"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-001",
+      "timestamp": "2026-07-30 16:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Reactor Bay 3 - Acid Dosing Skid",
+      "reporter_role": "Chemical Operator II",
+      "raw_text": "During morning line flushing on Reactor 3, observed intermittent acid spitting from the PTFE flange gasket on metering pump P-104. Flange spray shield was improperly seated and secured with only a single zip-tie instead of required locking collar. Operator was wearing safety glasses instead of a full face shield. Acid droplets splashed onto sleeve of chemical apron but did not penetrate skin. If pressure had surged to normal 45 PSI dosing pressure, direct facial contact with 98% H2SO4 would have occurred.",
+      "equipment_involved": "Sulfuric Acid Metering Pump P-104",
+      "environmental_factors": "High humidity, poor artificial lighting overhead",
+      "immediate_action_taken": "Isolated manual block valve V-12 and notified shift supervisor"
+    },
+    "extraction": {
+      "report_id": "NM-2024-001",
+      "primary_hazard": "Sulfuric Acid Line Leak with Displaced Flange Shield",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Improperly secured spray shield",
+        "Worn PTFE flange seal",
+        "Inadequate eye/face PPE for line break"
+      ],
+      "affected_assets": [
+        "Chemical Operator II",
+        "P-104 Acid Skid"
+      ],
+      "failed_safeguards": [
+        "Missing full face shield",
+        "Zip-tie used instead of approved locking flange band"
+      ],
+      "recommended_mitigation": "Install bolted stainless steel flange shields; re-train on PPE SOP-CHEM-04."
+    },
+    "assessment": {
+      "report_id": "NM-2024-001",
+      "risk_level": "High",
+      "risk_score": 8.9,
+      "confidence": 0.96,
+      "rationale": "High-concentration acid under pressure with missing primary physical barrier (spray shield) and PPE non-compliance. Catastrophic chemical burn potential.",
+      "osha_citations": [
+        "OSHA 1910.1200 (Hazard Communication)",
+        "OSHA 1910.133 (Eye and Face Protection)"
+      ],
+      "precursor_severity_signals": [
+        "Chemical Precursor",
+        "Inadequate PPE",
+        "Pressurized Liquid Leak"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-038",
+      "timestamp": "2026-07-28 12:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Semiconductor Cleanroom Assembly",
+      "location_specific": "Wet Etch Bench WB-04 #8",
+      "reporter_role": "Etch Specialist",
+      "raw_text": "During weekly first-aid audit at hydrofluoric acid (HF) wet bench, operator discovered emergency calcium gluconate gel tube in the wall dispenser box was expired by 14 months and crusty at seal. Eye-wash bottle seal had also been broken.",
+      "equipment_involved": "Hydrofluoric Acid Bath Unit",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-038",
+      "primary_hazard": "Expired Calcium Gluconate Antidote Kit at HF Acid Station",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Expired medical antidote in critical chemical zone",
+        "Unsealed secondary emergency eye wash"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Hydrofluoric Acid Bath Unit"
+      ],
+      "failed_safeguards": [
+        "Medical emergency antidote availability",
+        "Weekly safety equipment inspection checklist"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-038",
+      "risk_level": "Medium",
+      "risk_score": 6.7,
+      "confidence": 0.92,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.1200",
+        "OSHA 1910.151 (Medical Services and First Aid)"
+      ],
+      "precursor_severity_signals": [
+        "Chemical Safety Failure",
+        "Emergency Readiness Deficit"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-036",
+      "timestamp": "2026-07-17 00:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Chiller Plant Roof Section #5",
+      "reporter_role": "Roofer / Facility Tech",
+      "raw_text": "Technician walked to edge of roof 35 feet above ground to inspect cooling tower overflow pipe. Warning flag line was missing within 6 feet of leading edge, and permanent D-ring roof anchor was heavily rusted with broken swage sleeve.",
+      "equipment_involved": "Cooling Tower CT-03",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-036",
+      "primary_hazard": "Missing Parapet Fall Arrest Anchor on High Roof Edge",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Corroded fall arrest anchor point",
+        "Missing roof warning perimeter demarcations"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Cooling Tower CT-03"
+      ],
+      "failed_safeguards": [
+        "Engineered fall protection anchor",
+        "Visual perimeter warning line"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-036",
+      "risk_level": "High",
+      "risk_score": 8.9,
+      "confidence": 0.95,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.28 (Fall Protection Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Fall from Height Precursor",
+        "Defective Anchor Point"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-019",
+      "timestamp": "2026-07-14 17:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Chemical Processing & Synthesis",
+      "location_specific": "Centrifuge Room 1 #5",
+      "reporter_role": "Process Tech",
+      "raw_text": "During solvent-wetted solids discharge from basket centrifuge, nitrogen inerting purge valve pressure dipped below 0.5 inches water column setpoint. Low N2 pressure interlock failed to trip drive motor, allowing spinning basket to continue discharging in presence of ambient oxygen and flammable cyclohexane vapors.",
+      "equipment_involved": "Basket Centrifuge CF-101",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-019",
+      "primary_hazard": "Nitrogen Blanketing Depressurization on Flammable Cake Discharge",
+      "hazard_category": "Process Safety / Pressure Excursion",
+      "precursor_events": [
+        "Nitrogen supply pressure excursion",
+        "Failed safety interlock trip circuit",
+        "Flammable solvent vapor concentration"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Basket Centrifuge CF-101"
+      ],
+      "failed_safeguards": [
+        "Inert gas interlock switch",
+        "LEL vapor sensor"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-019",
+      "risk_level": "High",
+      "risk_score": 9.5,
+      "confidence": 0.92,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Process Safety / Pressure Excursion.",
+      "osha_citations": [
+        "OSHA 1910.119 (Process Safety Management of Highly Hazardous Chemicals)",
+        "NFPA 69 (Explosion Prevention Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Explosion Precursor",
+        "PSM Critical Failure",
+        "Loss of Inerting"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-018",
+      "timestamp": "2026-07-13 19:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Structural Beam Welding Bay #7",
+      "reporter_role": "Structural Welder",
+      "raw_text": "Welder initiated SMAW arc on I-beam fixture. Frayed copper ground cable with split rubber casing made contact with adjacent 100 PSI compressed air supply line, creating a localized high-amp flash and burning pinhole through the air manifold hose.",
+      "equipment_involved": "Miller 400A Mig/Tig Welder",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-018",
+      "primary_hazard": "Damaged Ground Clamp Cable Causing Arc Strike on Pressurized Gas Line",
+      "hazard_category": "Electrical / Arc Flash",
+      "precursor_events": [
+        "Split insulation on welding ground return lead",
+        "Routing welding leads across gas manifolds"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Miller 400A Mig/Tig Welder"
+      ],
+      "failed_safeguards": [
+        "Pre-work hot work lead inspection",
+        "Separation of electrical and pneumatic lines"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-018",
+      "risk_level": "Medium",
+      "risk_score": 6.5,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Electrical / Arc Flash.",
+      "osha_citations": [
+        "OSHA 1910.252 (General Requirements - Welding, Cutting and Brazing)"
+      ],
+      "precursor_severity_signals": [
+        "Arc Strike Precursor",
+        "Damaged Cable Insulation"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-039",
+      "timestamp": "2026-07-09 21:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Battery Charging Station B #2",
+      "reporter_role": "Battery Tech",
+      "raw_text": "Technician checking forklift battery electrolyte levels noticed plumbed emergency eye-wash station nozzles had accumulated battery charging acid-mist residue due to missing yellow pop-off dust caps. Testing station sprayed discolored water for first 6 seconds.",
+      "equipment_involved": "Lead-Acid Battery Changer Crane",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-039",
+      "primary_hazard": "Defective Eyewash Eyecup Missing Dust Caps in Acid Battery Room",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Missing dust caps on emergency eyewash",
+        "Acid mist deposition on plumbing orifices"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Lead-Acid Battery Changer Crane"
+      ],
+      "failed_safeguards": [
+        "ANSI Z358.1 Weekly flush protocol",
+        "Protective dust caps"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-039",
+      "risk_level": "Low",
+      "risk_score": 4.1,
+      "confidence": 0.94,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.151(c) (Eyewash Facilities)",
+        "ANSI Z358.1"
+      ],
+      "precursor_severity_signals": [
+        "First Aid Defect",
+        "Maintenance Lag"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-003",
+      "timestamp": "2026-07-09 14:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Press Line 2 - 400T Hydraulic Stamping Press",
+      "reporter_role": "Die Setter",
+      "raw_text": "During progressive die setup, operator noticed optical light curtain (presence sensing device) intermittently failed to trip ram stoppage when a calibration test bar passed through beam 4 and 5. Alignment bracket on receiver pole was loose from vibration. Ram continued cycle while test wand was inside die space. Operator had both hands poised to guide sheet steel into nest before realizing curtain status lamp remained green.",
+      "equipment_involved": "Komatsu 400T Press PR-02",
+      "environmental_factors": "Oily mist, concrete floor with slip-resistant grit",
+      "immediate_action_taken": "Stopped machine cycling using e-stop and flagged maintenance"
+    },
+    "extraction": {
+      "report_id": "NM-2024-003",
+      "primary_hazard": "Intermittent Light Curtain Failure on 400-Ton Hydraulic Press",
+      "hazard_category": "Mechanical / Pinch / Struck-by",
+      "precursor_events": [
+        "Vibration-induced misalignment of safety sensor",
+        "Missing daily light curtain wand verification sign-off"
+      ],
+      "affected_assets": [
+        "Die Setter",
+        "Tooling Assembly"
+      ],
+      "failed_safeguards": [
+        "Optical presence-sensing device (light curtain)",
+        "Daily pre-shift bump test checklist"
+      ],
+      "recommended_mitigation": "Torque and wire-lock mounting brackets; enforce strict pre-shift wand challenge verification interlock."
+    },
+    "assessment": {
+      "report_id": "NM-2024-003",
+      "risk_level": "High",
+      "risk_score": 9.6,
+      "confidence": 0.9,
+      "rationale": "Direct mechanical defeat of point-of-operation safeguard on a heavy stamping press. Classic precursor to catastrophic amputation.",
+      "osha_citations": [
+        "OSHA 1910.212 (General Requirements for all Machines)",
+        "OSHA 1910.217 (Mechanical Power Presses)"
+      ],
+      "precursor_severity_signals": [
+        "Amputation Precursor",
+        "Safety Circuit Defeat",
+        "Critical Point-of-Operation Failure"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-025",
+      "timestamp": "2026-07-04 22:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Pallet Racking Bay #12",
+      "reporter_role": "Reach Truck Driver",
+      "raw_text": "Operator observed heavy steel pallet (weight tag: 3,200 lbs) placed onto wire mesh deck rated for 2,500 lbs at rack level 4 (24 feet elevation). Wire decking had visible downward deflection of 1.5 inches and corner weld was cracked. Pallet had begun tilting slightly towards pedestrian picking lane.",
+      "equipment_involved": "Crown Reach Truck RR-5700 & Tier-4 Racking",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-025",
+      "primary_hazard": "Overloaded Wire Mesh Decking on High-Tier Pallet Rack",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Exceeded rack shelf weight rating",
+        "Cracked wire deck weld",
+        "Improper weight tag auditing"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Crown Reach Truck RR-5700 & Tier-4 Racking"
+      ],
+      "failed_safeguards": [
+        "Rack load rating signage",
+        "Forklift scale verification"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-025",
+      "risk_level": "High",
+      "risk_score": 8.8,
+      "confidence": 0.92,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.176 (Handling Materials - General)"
+      ],
+      "precursor_severity_signals": [
+        "Falling Object Precursor",
+        "Structural Racking Defect"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-006",
+      "timestamp": "2026-07-02 16:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "Semiconductor Cleanroom Assembly",
+      "location_specific": "Photolithography Bay 6",
+      "reporter_role": "Litho Technician",
+      "raw_text": "Small puddle of isopropyl alcohol (IPA) approximately 100ml found pooled on conductive vinyl floor near solvent drain line. Operator's ESD shoe slipped slightly during wafer cassette transfer, but balance was maintained with handrail. Drain tubing connection had loosened due to thermal cycling from exhaust duct.",
+      "equipment_involved": "Stepper Track Coat Unit 2",
+      "environmental_factors": "Class 100 cleanroom, yellow filtered lighting",
+      "immediate_action_taken": "Mopped puddle with certified cleanroom chemical pad and flagged facilities"
+    },
+    "extraction": {
+      "report_id": "NM-2024-006",
+      "primary_hazard": "Solvent Puddle Causing Minor Slip Hazard in Cleanroom",
+      "hazard_category": "Slip / Trip / Surface Hazard",
+      "precursor_events": [
+        "Loose solvent drain fitting",
+        "Lack of secondary drip tray under coupling"
+      ],
+      "affected_assets": [
+        "Litho Technician",
+        "Wafer Cassette ($85k)"
+      ],
+      "failed_safeguards": [
+        "Secondary containment tray",
+        "Preventative maintenance connection torque checks"
+      ],
+      "recommended_mitigation": "Replace slip-fit tubing with compression fittings; add drip pan with liquid sensor."
+    },
+    "assessment": {
+      "report_id": "NM-2024-006",
+      "risk_level": "Low",
+      "risk_score": 3.4,
+      "confidence": 0.96,
+      "rationale": "Minor liquid volume, no skin contact or fall occurred, low volatility hazard under high-exchange cleanroom airflow.",
+      "osha_citations": [
+        "OSHA 1910.22 (General Walking-Working Surfaces)"
+      ],
+      "precursor_severity_signals": [
+        "Slip Hazard",
+        "Minor Leak"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-014",
+      "timestamp": "2026-06-28 08:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Waste Water Treatment Basin 2",
+      "reporter_role": "Environmental Tech",
+      "raw_text": "Technician preparing to enter 10-foot deep aeration basin pit to unbolt pump flange conducted atmospheric test with 4-gas monitor through manhole hatch. Initial reading showed H2S at 4.2 PPM (action level 5 PPM). However, technician noticed calibration sticker had expired 8 months ago and bump test gas canister was completely empty. Secondary backup calibrated detector measured H2S at 18.5 PPM (exceeding OSHA PEL of 10 PPM ceiling).",
+      "equipment_involved": "Submersible Aerator Pump AP-02",
+      "environmental_factors": "Humid, sewage odor, confined basin pit",
+      "immediate_action_taken": "Refused entry, recalibrated 4-gas meter, and ventilated pit for 30 minutes"
+    },
+    "extraction": {
+      "report_id": "NM-2024-014",
+      "primary_hazard": "Confined Space Entry Attempt with Out-of-Calibration Gas Detector in High H2S Environment",
+      "hazard_category": "Atmospheric / Confined Space",
+      "precursor_events": [
+        "Expired instrument calibration sticker",
+        "Empty bump test verification station",
+        "Elevated toxic H2S atmosphere in recessed basin"
+      ],
+      "affected_assets": [
+        "Environmental Tech",
+        "Entry Attendant"
+      ],
+      "failed_safeguards": [
+        "Pre-entry instrument bump test protocol",
+        "Calibration tracking database"
+      ],
+      "recommended_mitigation": "Lock out uncalibrated detectors with automated dock test docking stations; retrain on confined space entry permit verification."
+    },
+    "assessment": {
+      "report_id": "NM-2024-014",
+      "risk_level": "High",
+      "risk_score": 9.7,
+      "confidence": 0.95,
+      "rationale": "Entry into deadly toxic gas atmosphere with compromised monitoring equipment. Premier fatal precursor in industrial operations.",
+      "osha_citations": [
+        "OSHA 1910.146 (Permit-Required Confined Spaces)"
+      ],
+      "precursor_severity_signals": [
+        "Fatal Precursor",
+        "Confined Space Hazard",
+        "H2S Gas Toxicity",
+        "Faulty Gas Monitor"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-040",
+      "timestamp": "2026-06-27 19:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Plasma CNC Cutting Table 3 #2",
+      "reporter_role": "CNC Operator",
+      "raw_text": "During heavy plate plasma beveling, molten slag accumulated on dry scrap plate edge due to low water table level. Minor flame flare ignited pallet wooden base stored 2 feet from table edge. Flame extinguished with CO2 extinguisher in under 10 seconds.",
+      "equipment_involved": "Koike 5-Axis CNC Plasma Burner",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-040",
+      "primary_hazard": "Water Table Sludge Build-up Blocking Emergency Slag Extraction",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Low water table level",
+        "Combustible wood pallet stored inside 5-foot hot work perimeter"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Koike 5-Axis CNC Plasma Burner"
+      ],
+      "failed_safeguards": [
+        "35-foot hot work combustible clearance standard",
+        "Water quench table"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-040",
+      "risk_level": "Low",
+      "risk_score": 3.9,
+      "confidence": 0.95,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.252(a) (Fire Prevention in Welding)"
+      ],
+      "precursor_severity_signals": [
+        "Hot Work Violation",
+        "Housekeeping Hazard"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-031",
+      "timestamp": "2026-06-26 08:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Battery Charging Station B #1",
+      "reporter_role": "Battery Tech",
+      "raw_text": "Technician checking forklift battery electrolyte levels noticed plumbed emergency eye-wash station nozzles had accumulated battery charging acid-mist residue due to missing yellow pop-off dust caps. Testing station sprayed discolored water for first 6 seconds.",
+      "equipment_involved": "Lead-Acid Battery Changer Crane",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-031",
+      "primary_hazard": "Defective Eyewash Eyecup Missing Dust Caps in Acid Battery Room",
+      "hazard_category": "Chemical / Toxic Hazard",
+      "precursor_events": [
+        "Missing dust caps on emergency eyewash",
+        "Acid mist deposition on plumbing orifices"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Lead-Acid Battery Changer Crane"
+      ],
+      "failed_safeguards": [
+        "ANSI Z358.1 Weekly flush protocol",
+        "Protective dust caps"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-031",
+      "risk_level": "Low",
+      "risk_score": 4.1,
+      "confidence": 0.96,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Chemical / Toxic Hazard.",
+      "osha_citations": [
+        "OSHA 1910.151(c) (Eyewash Facilities)",
+        "ANSI Z358.1"
+      ],
+      "precursor_severity_signals": [
+        "First Aid Defect",
+        "Maintenance Lag"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Low"
+  },
+  {
+    "report": {
+      "id": "NM-2024-041",
+      "timestamp": "2026-06-25 21:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "High-Bay Warehousing & Logistics",
+      "location_specific": "Pallet Racking Bay #2",
+      "reporter_role": "Reach Truck Driver",
+      "raw_text": "Operator observed heavy steel pallet (weight tag: 3,200 lbs) placed onto wire mesh deck rated for 2,500 lbs at rack level 4 (24 feet elevation). Wire decking had visible downward deflection of 1.5 inches and corner weld was cracked. Pallet had begun tilting slightly towards pedestrian picking lane.",
+      "equipment_involved": "Crown Reach Truck RR-5700 & Tier-4 Racking",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-041",
+      "primary_hazard": "Overloaded Wire Mesh Decking on High-Tier Pallet Rack",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Exceeded rack shelf weight rating",
+        "Cracked wire deck weld",
+        "Improper weight tag auditing"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Crown Reach Truck RR-5700 & Tier-4 Racking"
+      ],
+      "failed_safeguards": [
+        "Rack load rating signage",
+        "Forklift scale verification"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-041",
+      "risk_level": "High",
+      "risk_score": 8.8,
+      "confidence": 0.95,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.176 (Handling Materials - General)"
+      ],
+      "precursor_severity_signals": [
+        "Falling Object Precursor",
+        "Structural Racking Defect"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-004",
+      "timestamp": "2026-06-25 02:06:41",
+      "facility": "Facility Delta - Apex Logistics Hub",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Boiler Room Mezzanine Level 2",
+      "reporter_role": "HVAC Mechanic",
+      "raw_text": "Mechanic working on 12-foot catwalk replacing 2-inch flange nuts dropped a 15-inch adjustable spanner wrench. The wrench slipped through the 1.5-inch toe-board gap on the open-grate mezzanine and plummeted to the ground-level walkway adjacent to the water treatment laboratory. No workers were directly below at the moment, but the walkway is a designated primary egress route without active barricades or drop netting.",
+      "equipment_involved": "Chilled Water Expansion Tank TK-08",
+      "environmental_factors": "Elevated temperature (95\u00b0F), cramped overhead piping",
+      "immediate_action_taken": "Lowered wrench with rope; cleared perimeter below"
+    },
+    "extraction": {
+      "report_id": "NM-2024-004",
+      "primary_hazard": "Unsecured Tool Dropped from Mezzanine Walkway",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Non-tethered hand tools at elevation",
+        "Substandard toe-board gap on mezzanine grating",
+        "Absence of red-zone barricading below"
+      ],
+      "affected_assets": [
+        "Ground-level personnel",
+        "Water Lab Entrance"
+      ],
+      "failed_safeguards": [
+        "Tool lanyards/tethers",
+        "Dropped object perimeter barricading"
+      ],
+      "recommended_mitigation": "Mandate tool lanyards for all work > 4 feet; install mesh under-decking and toe-board skirting."
+    },
+    "assessment": {
+      "report_id": "NM-2024-004",
+      "risk_level": "Medium",
+      "risk_score": 6.8,
+      "confidence": 0.92,
+      "rationale": "Heavy metal tool dropped 12 feet into active walkway. Potential for severe blunt-force trauma had a worker traversed below.",
+      "osha_citations": [
+        "OSHA 1910.28 (Duty to have Fall Protection and Falling Object Protection)"
+      ],
+      "precursor_severity_signals": [
+        "Dropped Object Precursor",
+        "Working at Heights",
+        "Missing Drop Zone Control"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [
+      {
+        "id": "1",
+        "report_id": "NM-2024-004",
+        "original_risk": "Medium",
+        "overridden_risk": "High",
+        "safety_officer_id": "SO-Lead-EHS",
+        "override_reason": "Unbarricaded active pedestrian walkway directly below overhead catwalk makes dropped spanner an imminent fatal crush precursor.",
+        "timestamp": "2024-03-12 14:30:00"
+      }
+    ],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-009",
+      "timestamp": "2026-06-24 12:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Substation B - 480V Motor Control Center (MCC)",
+      "reporter_role": "Senior Electrician",
+      "raw_text": "Electrician was preparing to rack in a 480V breaker bucket after motor maintenance. Had removed dead-front panel and was reaching in with insulated socket without wearing NFPA 70E Arc Flash face shield and balaclava (only wearing 8 cal glasses). An ungrounded busbar had dropped a washer behind phase B during prior shift. Racking was paused when electrician noticed slight scorch mark on bus support.",
+      "equipment_involved": "Cutler-Hammer 480V Bucket Switchgear",
+      "environmental_factors": "Indoor climate controlled electrical vault",
+      "immediate_action_taken": "Donned 40 cal/cm\u00b2 arc flash suit and applied lock before resuming"
+    },
+    "extraction": {
+      "report_id": "NM-2024-009",
+      "primary_hazard": "Energized 480V Switchgear Racking without Arc Flash PPE",
+      "hazard_category": "Electrical / Arc Flash",
+      "precursor_events": [
+        "Missing Cal/cm\u00b2 arc-rated PPE",
+        "Foreign conductive object in enclosure",
+        "Absence of thermographic pre-check"
+      ],
+      "affected_assets": [
+        "Senior Electrician",
+        "MCC Substation"
+      ],
+      "failed_safeguards": [
+        "NFPA 70E PPE compliance",
+        "Foreign material exclusion protocol"
+      ],
+      "recommended_mitigation": "Mandate remote racking mechanisms; audit compliance on NFPA 70E PPE boundaries."
+    },
+    "assessment": {
+      "report_id": "NM-2024-009",
+      "risk_level": "High",
+      "risk_score": 9.3,
+      "confidence": 0.96,
+      "rationale": "Severe arc flash potential in 480V high-energy enclosure with missing blast PPE. Direct fatal precursor.",
+      "osha_citations": [
+        "OSHA 1910.303 (General Electrical Safety)",
+        "NFPA 70E (Standard for Electrical Safety in the Workplace)"
+      ],
+      "precursor_severity_signals": [
+        "Arc Flash Precursor",
+        "Electrical Arc Blast Risk",
+        "PPE Deficiency"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-021",
+      "timestamp": "2026-06-20 16:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "Fleet Loading Dock & Yard Operations",
+      "location_specific": "Fuel Island Station 2 #5",
+      "reporter_role": "Yard Mechanic",
+      "raw_text": "Routine quarterly testing of red mushroom emergency fuel shutoff switch at diesel island revealed internal mechanical spring had corroded and button remained stuck in 'Run' position despite full manual depression.",
+      "equipment_involved": "Diesel Dispenser Pump D-02",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-021",
+      "primary_hazard": "Emergency Fuel Cutoff Switch Jammed in Manual Position",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Corroded mechanical trip spring",
+        "Infrequent emergency switch exercising"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Diesel Dispenser Pump D-02"
+      ],
+      "failed_safeguards": [
+        "Emergency fuel shutoff (E-Stop)",
+        "Monthly functional testing"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-021",
+      "risk_level": "Medium",
+      "risk_score": 5.9,
+      "confidence": 0.95,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.106 (Flammable and Combustible Liquids)"
+      ],
+      "precursor_severity_signals": [
+        "E-Stop Failure",
+        "Fire Suppression Precursor"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-037",
+      "timestamp": "2026-06-19 12:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "Fleet Loading Dock & Yard Operations",
+      "location_specific": "Fuel Island Station 2 #8",
+      "reporter_role": "Yard Mechanic",
+      "raw_text": "Routine quarterly testing of red mushroom emergency fuel shutoff switch at diesel island revealed internal mechanical spring had corroded and button remained stuck in 'Run' position despite full manual depression.",
+      "equipment_involved": "Diesel Dispenser Pump D-02",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-037",
+      "primary_hazard": "Emergency Fuel Cutoff Switch Jammed in Manual Position",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Corroded mechanical trip spring",
+        "Infrequent emergency switch exercising"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Diesel Dispenser Pump D-02"
+      ],
+      "failed_safeguards": [
+        "Emergency fuel shutoff (E-Stop)",
+        "Monthly functional testing"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-037",
+      "risk_level": "Medium",
+      "risk_score": 5.9,
+      "confidence": 0.95,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.106 (Flammable and Combustible Liquids)"
+      ],
+      "precursor_severity_signals": [
+        "E-Stop Failure",
+        "Fire Suppression Precursor"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-028",
+      "timestamp": "2026-06-12 07:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Chiller Plant Roof Section #7",
+      "reporter_role": "Roofer / Facility Tech",
+      "raw_text": "Technician walked to edge of roof 35 feet above ground to inspect cooling tower overflow pipe. Warning flag line was missing within 6 feet of leading edge, and permanent D-ring roof anchor was heavily rusted with broken swage sleeve.",
+      "equipment_involved": "Cooling Tower CT-03",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-028",
+      "primary_hazard": "Missing Parapet Fall Arrest Anchor on High Roof Edge",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Corroded fall arrest anchor point",
+        "Missing roof warning perimeter demarcations"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Cooling Tower CT-03"
+      ],
+      "failed_safeguards": [
+        "Engineered fall protection anchor",
+        "Visual perimeter warning line"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-028",
+      "risk_level": "High",
+      "risk_score": 8.9,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.28 (Fall Protection Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Fall from Height Precursor",
+        "Defective Anchor Point"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-042",
+      "timestamp": "2026-06-03 16:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Structural Beam Welding Bay #10",
+      "reporter_role": "Structural Welder",
+      "raw_text": "Welder initiated SMAW arc on I-beam fixture. Frayed copper ground cable with split rubber casing made contact with adjacent 100 PSI compressed air supply line, creating a localized high-amp flash and burning pinhole through the air manifold hose.",
+      "equipment_involved": "Miller 400A Mig/Tig Welder",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-042",
+      "primary_hazard": "Damaged Ground Clamp Cable Causing Arc Strike on Pressurized Gas Line",
+      "hazard_category": "Electrical / Arc Flash",
+      "precursor_events": [
+        "Split insulation on welding ground return lead",
+        "Routing welding leads across gas manifolds"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Miller 400A Mig/Tig Welder"
+      ],
+      "failed_safeguards": [
+        "Pre-work hot work lead inspection",
+        "Separation of electrical and pneumatic lines"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-042",
+      "risk_level": "Medium",
+      "risk_score": 6.5,
+      "confidence": 0.9,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Electrical / Arc Flash.",
+      "osha_citations": [
+        "OSHA 1910.252 (General Requirements - Welding, Cutting and Brazing)"
+      ],
+      "precursor_severity_signals": [
+        "Arc Strike Precursor",
+        "Damaged Cable Insulation"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-020",
+      "timestamp": "2026-05-27 11:06:41",
+      "facility": "Plant Alpha - Midwest Complex",
+      "department": "Plant Facilities & Maintenance",
+      "location_specific": "Chiller Plant Roof Section #8",
+      "reporter_role": "Roofer / Facility Tech",
+      "raw_text": "Technician walked to edge of roof 35 feet above ground to inspect cooling tower overflow pipe. Warning flag line was missing within 6 feet of leading edge, and permanent D-ring roof anchor was heavily rusted with broken swage sleeve.",
+      "equipment_involved": "Cooling Tower CT-03",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-020",
+      "primary_hazard": "Missing Parapet Fall Arrest Anchor on High Roof Edge",
+      "hazard_category": "Working at Height / Falling Objects",
+      "precursor_events": [
+        "Corroded fall arrest anchor point",
+        "Missing roof warning perimeter demarcations"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Cooling Tower CT-03"
+      ],
+      "failed_safeguards": [
+        "Engineered fall protection anchor",
+        "Visual perimeter warning line"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-020",
+      "risk_level": "High",
+      "risk_score": 8.9,
+      "confidence": 0.93,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Working at Height / Falling Objects.",
+      "osha_citations": [
+        "OSHA 1910.28 (Fall Protection Systems)"
+      ],
+      "precursor_severity_signals": [
+        "Fall from Height Precursor",
+        "Defective Anchor Point"
+      ],
+      "escalation_potential": true
+    },
+    "overrides": [],
+    "effective_risk_level": "High"
+  },
+  {
+    "report": {
+      "id": "NM-2024-034",
+      "timestamp": "2026-05-26 20:06:41",
+      "facility": "Plant Gamma - Great Lakes Assembly",
+      "department": "Heavy Fabrication & Stamping",
+      "location_specific": "Structural Beam Welding Bay #10",
+      "reporter_role": "Structural Welder",
+      "raw_text": "Welder initiated SMAW arc on I-beam fixture. Frayed copper ground cable with split rubber casing made contact with adjacent 100 PSI compressed air supply line, creating a localized high-amp flash and burning pinhole through the air manifold hose.",
+      "equipment_involved": "Miller 400A Mig/Tig Welder",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-034",
+      "primary_hazard": "Damaged Ground Clamp Cable Causing Arc Strike on Pressurized Gas Line",
+      "hazard_category": "Electrical / Arc Flash",
+      "precursor_events": [
+        "Split insulation on welding ground return lead",
+        "Routing welding leads across gas manifolds"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Miller 400A Mig/Tig Welder"
+      ],
+      "failed_safeguards": [
+        "Pre-work hot work lead inspection",
+        "Separation of electrical and pneumatic lines"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-034",
+      "risk_level": "Medium",
+      "risk_score": 6.5,
+      "confidence": 0.96,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Electrical / Arc Flash.",
+      "osha_citations": [
+        "OSHA 1910.252 (General Requirements - Welding, Cutting and Brazing)"
+      ],
+      "precursor_severity_signals": [
+        "Arc Strike Precursor",
+        "Damaged Cable Insulation"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  },
+  {
+    "report": {
+      "id": "NM-2024-029",
+      "timestamp": "2026-05-24 02:06:41",
+      "facility": "Plant Beta - Gulf Coast Refinery",
+      "department": "Fleet Loading Dock & Yard Operations",
+      "location_specific": "Fuel Island Station 2 #5",
+      "reporter_role": "Yard Mechanic",
+      "raw_text": "Routine quarterly testing of red mushroom emergency fuel shutoff switch at diesel island revealed internal mechanical spring had corroded and button remained stuck in 'Run' position despite full manual depression.",
+      "equipment_involved": "Diesel Dispenser Pump D-02",
+      "environmental_factors": "Standard factory conditions",
+      "immediate_action_taken": "Safety officer logged issue, corrective action ticket generated"
+    },
+    "extraction": {
+      "report_id": "NM-2024-029",
+      "primary_hazard": "Emergency Fuel Cutoff Switch Jammed in Manual Position",
+      "hazard_category": "Thermal / Fire / Hot Work",
+      "precursor_events": [
+        "Corroded mechanical trip spring",
+        "Infrequent emergency switch exercising"
+      ],
+      "affected_assets": [
+        "Operating Personnel",
+        "Diesel Dispenser Pump D-02"
+      ],
+      "failed_safeguards": [
+        "Emergency fuel shutoff (E-Stop)",
+        "Monthly functional testing"
+      ],
+      "recommended_mitigation": "Audit preventive maintenance and implement physical safeguards."
+    },
+    "assessment": {
+      "report_id": "NM-2024-029",
+      "risk_level": "Medium",
+      "risk_score": 5.9,
+      "confidence": 0.9,
+      "rationale": "Automated risk scoring based on precursor pattern evaluation for Thermal / Fire / Hot Work.",
+      "osha_citations": [
+        "OSHA 1910.106 (Flammable and Combustible Liquids)"
+      ],
+      "precursor_severity_signals": [
+        "E-Stop Failure",
+        "Fire Suppression Precursor"
+      ],
+      "escalation_potential": false
+    },
+    "overrides": [],
+    "effective_risk_level": "Medium"
+  }
+]
