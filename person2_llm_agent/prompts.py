@@ -1,87 +1,140 @@
+def build_extraction_prompt(report: str) -> str:
+    return f"""
+You are a workplace safety analysis assistant.
+
+Analyze the following safety report.
+
+Extract ONLY information that is explicitly stated
+or strongly supported by the report.
+
+Do not invent information.
+
+Return valid JSON with exactly these fields:
+
+{{
+    "risk_factors": [],
+    "location": null,
+    "department": null,
+    "hazards": [],
+    "potential_consequences": [],
+    "missing_information": []
+}}
+
+Definitions:
+
+risk_factors:
+- Specific conditions or behaviors that increase risk.
+- Examples: "no PPE", "oil spill", "exposed wiring".
+
+location:
+- Where the incident happened, if mentioned.
+
+department:
+- Department or work area, if mentioned.
+
+hazards:
+- One or more hazards identified in the report.
+
+potential_consequences:
+- What could happen because of the hazards.
+
+missing_information:
+- Important information that would help assess the risk
+  but is not present in the report.
+
+Safety report:
+---
+{report}
+---
+
+Return JSON only.
 """
-Person 2: Prompt Templates & Dynamic Prompt Engineering
-Contains structured prompts for near-miss parsing, precursor hazard extraction,
-and risk classification (Low, Medium, High) with dynamic few-shot exemplar injection.
+
+
+def build_classification_prompt(
+    report: str,
+    extracted_data: dict,
+    few_shot_examples: list
+) -> str:
+
+    examples_text = ""
+
+    if few_shot_examples:
+        examples_text = "\n\nHere are examples of previous safety-officer corrections:\n"
+
+        for i, example in enumerate(few_shot_examples, 1):
+            examples_text += f"""
+Example {i}
+
+Report:
+{example["report"]}
+
+Original AI classification:
+{example["original_label"]}
+
+Safety officer correction:
+{example["corrected_label"]}
+
+Officer reason:
+{example["reason"]}
 """
-from typing import List, Optional
-from person1_data_pipeline.schema import RiskOverride
 
+    return f"""
+You are a workplace safety risk classification assistant.
 
-class PromptFactory:
-    """Constructs calibrated prompts for the Incident Precursor Reasoning Agent."""
+Classify the safety report as exactly one of:
 
-    SYSTEM_SAFETY_INSPECTOR = """You are an elite Senior Industrial Safety Officer and OSHA Precursor Incident Analyst.
-Your mandate is to inspect free-text safety observation and near-miss reports, identify critical incident precursors,
-and assign an objective Risk Level (Low, Medium, High).
+LOW
+MEDIUM
+HIGH
 
-Risk Level Classification Rubric:
-- HIGH RISK:
-  * Involves high-energy hazards or direct fatal precursors (falls > 4ft, heavy mobile equipment, high voltage/arc flash,
-    toxic/corrosive chemicals under pressure, confined spaces, bypassed mechanical interlocks, suspended loads).
-  * Multiple barriers failed or missing.
-  * Near-miss where luck, timing, or reflex was the sole factor preventing severe injury or fatality.
+Use the following general guidance.
 
-- MEDIUM RISK:
-  * Significant hazards that can cause lacerations, fractures, moderate chemical contact, or heat burns, but lack immediate fatal/amputation potential.
-  * Primary physical barrier failed, but secondary administrative safeguard partially held.
+LOW:
+- Minor hazard
+- Little immediate danger
+- No significant potential consequence
+- Easily corrected
 
-- LOW RISK:
-  * Minor slips, trips without fall, minor ergonomic strain, clean water leaks, minor housekeeping or PPE labeling defects.
-  * No potential for lost time or permanent impairment.
+MEDIUM:
+- Meaningful safety concern
+- Could cause injury or damage if not corrected
+- Requires attention
 
-You MUST follow established OSHA standards and prioritize PRECURSOR SIGNALS (early warnings of catastrophe) over superficial outcome severity."""
+HIGH:
+- Serious or immediate hazard
+- Could cause serious injury, fatality, major equipment damage,
+  fire, electrical incident, chemical exposure, etc.
+- Multiple interacting hazards may increase the risk
 
-    @classmethod
-    def build_extraction_and_classification_prompt(
-        cls,
-        report_text: str,
-        department: str,
-        location: str,
-        retrieved_osha_context: str = "",
-        historical_overrides: Optional[List[RiskOverride]] = None,
-    ) -> str:
-        """Constructs a prompt enriched with RAG regulatory context and human safety officer overrides."""
-        prompt = [
-            f"Department: {department}",
-            f"Location: {location}",
-            f"Raw Near-Miss Observation Text:\n\"\"\"\n{report_text}\n\"\"\"\n",
-        ]
+Important:
+- Consider the actual hazards described.
+- Consider potential consequences.
+- Consider multiple hazards together.
+- Do not assume facts that are not present.
+- The examples below are previous human corrections and should
+  influence your reasoning when they are relevant.
+{examples_text}
 
-        if retrieved_osha_context:
-            prompt.append("=== GROUNDED OSHA REGULATORY BENCHMARKS & MITIGATION GUIDANCE ===")
-            prompt.append(retrieved_osha_context)
-            prompt.append("=================================================================\n")
+Current report:
+---
+{report}
+---
 
-        # Dynamic Few-Shot Injection: injects real human safety corrections
-        if historical_overrides and len(historical_overrides) > 0:
-            prompt.append("=== DYNAMIC FEW-SHOT CORRECTIONS FROM SENIOR SAFETY OFFICERS ===")
-            prompt.append("The following are recent human overrides where the safety officer corrected an initial assessment.")
-            prompt.append("Learn from their rationale to calibrate your classification:")
-            for idx, ov in enumerate(historical_overrides, 1):
-                prompt.append(
-                    f"Example {idx}: [Original Model Risk: {ov.original_risk.value}] -> [Officer Override: {ov.overridden_risk.value}]\n"
-                    f"Officer Justification: \"{ov.override_reason}\"\n"
-                )
-            prompt.append("=================================================================\n")
+Extracted information:
+{extracted_data}
 
-        prompt.append(
-            "TASK:\n"
-            "Analyze the report text and return a JSON object with the following exact keys:\n"
-            "{\n"
-            '  "primary_hazard": "Concise title of the hazard",\n'
-            '  "hazard_category": "One of: Chemical / Toxic Hazard | Mechanical / Pinch / Struck-by | Electrical / Arc Flash | Slip / Trip / Surface Hazard | Working at Height / Falling Objects | Thermal / Fire / Hot Work | Atmospheric / Confined Space | Ergonomic / Heavy Lifting | Process Safety / Pressure Excursion",\n'
-            '  "precursor_events": ["list", "of", "immediate", "unsafe", "conditions", "or", "early", "warning", "signs"],\n'
-            '  "affected_assets": ["list", "of", "personnel", "or", "assets", "at", "risk"],\n'
-            '  "failed_safeguards": ["list", "of", "bypassed", "or", "failed", "controls"],\n'
-            '  "recommended_mitigation": "Immediate actionable control",\n'
-            '  "risk_level": "Low" or "Medium" or "High",\n'
-            '  "risk_score": float between 0.0 and 10.0,\n'
-            '  "rationale": "Comprehensive explanation justifying the risk level based on precursor severity and safety margins",\n'
-            '  "osha_citations": ["relevant OSHA standards or benchmarks"],\n'
-            '  "precursor_severity_signals": ["Fatal Precursor", "Energy Isolation Defect", etc.],\n'
-            '  "escalation_potential": true or false\n'
-            "}\n"
-            "Return valid JSON only. Do not include markdown fences or preamble."
-        )
+Return valid JSON only:
 
-        return "\n".join(prompt)
+{{
+    "risk_level": "LOW",
+    "confidence": 0.0,
+    "reason": "...",
+    "human_review_required": false
+}}
+
+Confidence must be a number between 0 and 1.
+
+Set human_review_required to true when the classification
+is uncertain or confidence is below 0.60.
+"""
