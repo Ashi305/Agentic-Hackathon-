@@ -1,6 +1,6 @@
 """
 Person 4: Streamlit Master Application
-Safety Report Analysis Agent (Incident Precursor Detector)
+Incident Precursor Reasoning Agent (IPRA) - EHS Command Center
 Track: Perception, Voice & Document Reasoning Agents
 """
 import os
@@ -49,7 +49,7 @@ def init_app_state():
 
 def main():
     st.set_page_config(
-        page_title="Incident Precursor Agent | EHS Command Center",
+        page_title="Incident Precursor Reasoning Agent | EHS Command Center",
         page_icon="🛡️",
         layout="wide",
         initial_sidebar_state="expanded",
@@ -62,70 +62,108 @@ def main():
     agent: IncidentPrecursorAgent = st.session_state["agent"]
     few_shot_manager: DynamicFewShotManager = st.session_state["few_shot_manager"]
 
-    # Sidebar
+    # Sidebar Navigation & System Monitor
     with st.sidebar:
-        st.markdown("## 🛡️ EHS Agentic Command")
-        st.markdown("<p style='font-size: 0.85rem; color: #94a3b8;'>Incident Precursor Detector & Dynamic Few-Shot Reasoner</p>", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <span style="font-size: 1.6rem;">🛡️</span>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: #ffffff;">EHS Command</h2>
+                    <p style="margin: 0; font-size: 0.76rem; color: #38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Precursor Reasoner
+                    </p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.divider()
 
-        # System Health & Architecture Status
+        # Architecture & Storage Status
         df = storage.to_dataframe()
         report_count = len(df)
         override_count = len(storage.get_all_overrides())
         active_exemplars = len(few_shot_manager.get_latest_exemplars(max_examples=5))
 
-        st.markdown("### ⚙️ System Status")
-        st.markdown(f"📦 **Reports Ingested:** `{report_count}`")
-        st.markdown(f"⚖️ **Logged Overrides:** `{override_count}`")
-        st.markdown(f"🧠 **Active Few-Shot Exemplars:** `{active_exemplars}`")
-        st.markdown(f"🗄️ **Storage Layer:** `SQLite (safety_warehouse.db)`")
-        
+        st.markdown("### ⚙️ System Telemetry")
+        st.markdown(
+            f"""
+            <div style="background: rgba(15, 23, 42, 0.65); padding: 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.85rem;">
+                <div style="margin-bottom: 8px;">
+                    <span style="color: #94a3b8;">Active Warehouse:</span><br>
+                    <b style="color: #f8fafc;">{report_count} Reports Ingested</b>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span style="color: #94a3b8;">Human Corrections:</span><br>
+                    <b style="color: #c084fc;">{override_count} Logged Overrides</b>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span style="color: #94a3b8;">Dynamic Few-Shot Pool:</span><br>
+                    <b style="color: #38bdf8;">{active_exemplars} Active Exemplars</b>
+                </div>
+                <div>
+                    <span style="color: #94a3b8;">Storage Engine:</span><br>
+                    <code>SQLite (safety_warehouse.db)</code>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
         has_gemini = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
-        llm_badge = "🟢 Gemini Connected" if has_gemini else "⚡ Deterministic Heuristic Engine (Offline Validated)"
-        st.markdown(f"🤖 **Inference Mode:** <br><span style='font-size: 0.82rem; color: #38bdf8;'>{llm_badge}</span>", unsafe_allow_html=True)
+        llm_engine_label = "Gemini Cloud API" if has_gemini else "Deterministic Expert Rule Engine"
+        st.markdown(
+            f"""
+            <div style="margin-top: 12px; padding: 10px; background: rgba(56, 189, 248, 0.08); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25); font-size: 0.80rem;">
+                <span class="pulse-dot"></span> <span style="font-weight: 700; color: #38bdf8; margin-left: 6px;">AGENT INFERENCE:</span><br>
+                <span style="color: #e2e8f0;">{llm_engine_label}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         st.divider()
-        st.markdown("### 🚀 Quick Utilities")
-        if st.button("🔄 Reload & Re-seed Database", use_container_width=True):
+        st.markdown("### 🛠️ Quick Utilities")
+        if st.button("🔄 Re-Seed & Reload Benchmark (42 Reports)", use_container_width=True):
             storage.seed_initial_data(target_count=42, force_reload=True)
-            st.success("Warehouse re-seeded!")
+            st.success("Warehouse refreshed!")
             st.rerun()
 
-        st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
         st.markdown(
-            "<div style='font-size: 0.75rem; color: #64748b; line-height: 1.4;'>"
+            "<div style='font-size: 0.72rem; color: #64748b; line-height: 1.4;'>"
             "National Level Agentic AI Hackathon<br>"
             "Track: Perception, Voice & Document Reasoning Agents<br>"
-            "Person 1: Data Pipeline | Person 2: Agent Engine<br>"
-            "Person 3: Analytics | Person 4: Streamlit UI"
+            "Person 4: Streamlit Frontend Lead"
             "</div>",
             unsafe_allow_html=True,
         )
 
-    # Main Application Header
+    # Master Application Header Banner
     st.markdown(
         """
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
             <div>
-                <h1 style="margin: 0; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; color: #f8fafc;">
-                    Incident Precursor Detector
+                <h1 style="margin: 0; font-size: 2.15rem; font-weight: 800; letter-spacing: -0.03em; color: #ffffff;">
+                    Safety Report Analysis Agent
                 </h1>
                 <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 0.95rem;">
-                    Autonomous extraction of incident precursors, grounded OSHA RAG scoring, and dynamic few-shot feedback.
+                    Autonomous incident precursor extraction, grounded OSHA RAG scoring, and dynamic few-shot feedback.
                 </p>
             </div>
             <div style="text-align: right;">
-                <span class="badge badge-high">Active Monitoring</span>
+                <span class="badge-pill high" style="font-size: 0.82rem;">Live Precursor Monitoring</span>
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # Main Navigation Tabs
+    # Main Tab Navigation
     tab1, tab2, tab3, tab4 = st.tabs([
         "📊 Executive Risk Dashboard",
-        "📥 Report Ingestion & Real-Time Agent",
+        "📥 Multi-Modal Ingestion Workbench",
         "⚖️ Safety Officer Overrides (Compulsory Add-On)",
         "🔬 Agent Reasoning & Tool Inspector",
     ])

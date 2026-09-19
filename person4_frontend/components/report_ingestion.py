@@ -1,14 +1,17 @@
 """
-Person 4: Report Ingestion & Real-Time Agent Analysis Component
-Supports free-text submission, walkie-talkie audio transcript simulation,
-and preset industrial scenario loading.
+Person 4: Multi-Modal Ingestion Workbench
+Supports Free-Text Observation Forms, Field Audio / Walkie-Talkie Simulation,
+and Batch JSON File Upload with Schema Validation.
 """
 import streamlit as st
+import json
 import time
+from typing import List, Dict, Any
+from person1_data_pipeline.schema import NearMissReport
 from person2_llm_agent.agent_orchestrator import IncidentPrecursorAgent
 
 PRESET_SCENARIOS = {
-    "Acid Line Gasket Failure (High Risk Precursor)": {
+    "Acid Flange Spray Shield Defect (High Risk Precursor)": {
         "dept": "Chemical Processing & Synthesis",
         "loc": "Reactor Bay 3 - Acid Dosing Skid",
         "equip": "P-104 Sulfuric Acid Metering Pump",
@@ -26,7 +29,7 @@ PRESET_SCENARIOS = {
         "equip": "Chilled Water Expansion Tank TK-08",
         "text": "Mechanic working on 12-foot catwalk replacing 2-inch flange nuts dropped a 15-inch adjustable spanner wrench. The wrench slipped through the 1.5-inch toe-board gap on the open-grate mezzanine and plummeted to the ground-level walkway adjacent to the water treatment laboratory. No workers were directly below at the moment, but the walkway is a designated primary egress route without active barricades or drop netting."
     },
-    "Robot Cell Interlock Magnetic Bypass (Fatal Precursor)": {
+    "Robot Welding Cell Interlock Bypass (Fatal Precursor)": {
         "dept": "Heavy Fabrication & Stamping",
         "loc": "Robotic Welding Cell 4",
         "equip": "Fanuc 6-Axis Arc Mate Robot",
@@ -40,123 +43,322 @@ PRESET_SCENARIOS = {
     }
 }
 
+RADIO_VOICE_MEMOS = {
+    "Logistics Channel 4 (Loading Dock Separation)": {
+        "speaker": "Hostler Unit 12 (Marcus Vance)",
+        "channel": "Channel 4 - Yard & Logistics",
+        "raw_audio_transcript": "Dispatch, this is Marcus on Yard Jockey 12 at Dock Door 8. We got a severe near miss here. Backed up into trailer 402, green light was showing on the panel, but the automated lock jaw was jammed open with mud. The trailer crept out almost six inches while the forklift had its drive tires on the plate. Forklift operator slammed the emergency brake just in time. Dock lock sensor is throwing false positive greens. Requesting immediate maintenance lockout before somebody tips off the ledge. Over."
+    },
+    "Chemical Ops Channel 2 (Scrubber Exhaust Alarm)": {
+        "speaker": "Operator Senior Lead (Elena Rostova)",
+        "channel": "Channel 2 - Reaction & Synthesis",
+        "raw_audio_transcript": "Control room, Elena calling from Scrubber Tower B. We have a low airflow warning on the caustic circulation line. Someone bypassed the alarm siren with a jumper on the terminal block, so nobody heard the alert. Caustic flow dropped to near zero for at least 15 minutes during the chlorine purge cycle. Faint chlorine smell near the vent pipe. We are initiating manual shutdown now. Over."
+    },
+    "Electrical Channel 6 (Substation Breaker Hot Spot)": {
+        "speaker": "Senior Electrician (David Zhao)",
+        "channel": "Channel 6 - High Voltage Infrastructure",
+        "raw_audio_transcript": "EHS desk, David Zhao in Substation Alpha. During routine thermal imaging, phase B connection on the 480-volt feeder breaker registered 185 degrees Celsius under 60 percent load. Bolt torque was loose and the fiber insulating barrier has heat discoloration. If we had surged to peak load during shift change, it would have caused an arc flash blowout in the main MCC room. Requesting immediate line clearance. Over."
+    }
+}
+
 
 def render_report_ingestion(agent: IncidentPrecursorAgent):
-    """Renders the interactive report ingestion workbench."""
-    st.markdown("<div class='section-header'>📝 Ingest Unstructured Safety Observation</div>", unsafe_allow_html=True)
-    st.markdown("Submit free-text field reports or simulate real-time radio/voice transcripts for automated precursor analysis.")
+    """Renders the multi-modal report ingestion hub."""
+    st.markdown(
+        """
+        <div class="view-title">
+            <span>📥 Multi-Modal Safety Observation Ingestion</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    # Preset Quick-Loader
-    col_preset, col_voice = st.columns([7, 3])
-    with col_preset:
+    ingestion_mode = st.radio(
+        "Select Ingestion Modality:",
+        ["✍️ Structured Free-Text Narrative", "🎙️ Radio / Voice Transcript Simulator", "📂 Batch JSON File Ingestion"],
+        horizontal=True,
+    )
+
+    # -------------------------------------------------------------------------
+    # MODALITY 1: Structured Free-Text Narrative
+    # -------------------------------------------------------------------------
+    if ingestion_mode == "✍️ Structured Free-Text Narrative":
+        st.markdown(
+            """
+            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+                Input free-text incident observations directly or select pre-calibrated operational test scenarios to evaluate agent reasoning.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
         preset_choice = st.selectbox(
-            "⚡ Quick-Fill Realistic Operational Scenario:",
-            ["Custom Report (Type Below)"] + list(PRESET_SCENARIOS.keys()),
-        )
-    with col_voice:
-        simulate_voice = st.checkbox("🎙️ Simulate Voice/Walkie-Talkie Mode", help="Formats raw text as live speech-to-text transcript")
-
-    # Determine default values based on preset
-    default_text = ""
-    default_dept = "Chemical Processing & Synthesis"
-    default_loc = "Main Production Deck"
-    default_equip = "N/A"
-
-    if preset_choice != "Custom Report (Type Below)":
-        p_data = PRESET_SCENARIOS[preset_choice]
-        default_text = p_data["text"]
-        default_dept = p_data["dept"]
-        default_loc = p_data["loc"]
-        default_equip = p_data["equip"]
-
-    with st.form("safety_ingestion_form"):
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            department = st.text_input("Department / Operating Sector", value=default_dept)
-        with c2:
-            location = st.text_input("Specific Zone / Deck / Bay", value=default_loc)
-        with c3:
-            equipment = st.text_input("Machinery / Asset Involved", value=default_equip)
-
-        report_text = st.text_area(
-            "Free-Text Near-Miss / Observation Narrative:",
-            value=default_text,
-            height=160,
-            placeholder="Describe what occurred, unsafe conditions observed, immediate actions taken, and potential hazards...",
+            "⚡ Quick-Fill Operational Test Scenarios:",
+            ["Custom Narrative (Type Manually)"] + list(PRESET_SCENARIOS.keys()),
         )
 
-        submit_btn = st.form_submit_button("🚀 Run Precursor Analysis & Reason", use_container_width=True)
+        default_text = ""
+        default_dept = "Chemical Processing & Synthesis"
+        default_loc = "Reactor Bay 3 - Acid Dosing Skid"
+        default_equip = "P-104 Sulfuric Acid Metering Pump"
 
-    if submit_btn:
-        if not report_text.strip():
-            st.error("Please enter observation text before triggering analysis.")
-            return
+        if preset_choice != "Custom Narrative (Type Manually)":
+            p = PRESET_SCENARIOS[preset_choice]
+            default_text = p["text"]
+            default_dept = p["dept"]
+            default_loc = p["loc"]
+            default_equip = p["equip"]
 
-        final_text = report_text
-        if simulate_voice:
-            final_text = f"[VOICE RADIO TRANSCRIPT - CHANNEL 4 LOG]: {report_text} [OVER]"
+        with st.form("free_text_ingestion_form"):
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                dept_val = st.text_input("Operating Department", value=default_dept)
+            with c2:
+                loc_val = st.text_input("Specific Facility Zone / Deck", value=default_loc)
+            with c3:
+                equip_val = st.text_input("Machinery / Equipment Involved", value=default_equip)
 
-        with st.spinner("Agent invoking perception tools, retrieving OSHA guidelines, and calculating severity..."):
-            trace = agent.analyze_report(
-                raw_text=final_text,
-                department=department,
-                location=location,
-                equipment=equipment,
+            text_val = st.text_area(
+                "Unstructured Observation / Near-Miss Narrative:",
+                value=default_text,
+                height=150,
+                placeholder="Describe unsafe conditions, precursor events, actions taken, and potential escalation risks...",
             )
-            st.session_state["latest_trace"] = trace
-            st.success(f"Analysis completed for report {trace.report_id}!")
 
-    # Display results if present
+            submit_btn = st.form_submit_button("🚀 Run Agent Reasoner & Ingest", use_container_width=True)
+
+        if submit_btn:
+            if not text_val.strip():
+                st.error("Narrative text cannot be empty.")
+            else:
+                _execute_agent_analysis(agent, text_val, dept_val, loc_val, equip_val)
+
+    # -------------------------------------------------------------------------
+    # MODALITY 2: Field Audio / Walkie-Talkie Simulation
+    # -------------------------------------------------------------------------
+    elif ingestion_mode == "🎙️ Radio / Voice Transcript Simulator":
+        st.markdown(
+            """
+            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+                Simulates real-world two-way radio walkie-talkie field communications and speech-to-text audio perception feeds.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        radio_choice = st.selectbox(
+            "Select Field Radio Channel & Walkie-Talkie Feed:",
+            list(RADIO_VOICE_MEMOS.keys())
+        )
+        memo = RADIO_VOICE_MEMOS[radio_choice]
+
+        # Audio Simulator Deck UI
+        st.markdown(
+            f"""
+            <div class="audio-deck">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="pulse-dot"></span>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-transform: uppercase;">
+                        [LIVE RECEPTION: {memo['channel']}]
+                    </span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; height: 28px;">
+                    <span class="waveform-bar" style="animation-delay: 0.1s; height: 18px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.4s; height: 26px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.2s; height: 12px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.5s; height: 22px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.3s; height: 15px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.6s; height: 28px;"></span>
+                </div>
+                <div style="margin-left: auto; font-size: 0.82rem; color: #94a3b8;">
+                    Speaker: <b>{memo['speaker']}</b> | Codec: <code>Opus/16kHz</code>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("**Perceived Audio Speech-to-Text Transcript:**")
+        st.info(f"📻 \"{memo['raw_audio_transcript']}\"")
+
+        col_v1, col_v2 = st.columns(2)
+        with col_v1:
+            voice_dept = st.text_input("Transcribed Department", value=radio_choice.split(" (")[0].replace(" Channel", ""))
+        with col_v2:
+            voice_loc = st.text_input("Operational Area", value="Radio Sector Broadcast Zone")
+
+        if st.button("🎙️ Process Radio Transmission Through Agent", use_container_width=True):
+            _execute_agent_analysis(
+                agent,
+                f"[RADIO DISPATCH TRANSCRIPT]: {memo['raw_audio_transcript']}",
+                voice_dept,
+                voice_loc,
+                equipment="Two-Way Radio Network",
+            )
+
+    # -------------------------------------------------------------------------
+    # MODALITY 3: Batch JSON File Ingestion
+    # -------------------------------------------------------------------------
+    elif ingestion_mode == "📂 Batch JSON File Ingestion":
+        st.markdown(
+            """
+            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+                Upload multiple historical safety reports formatted as JSON. The agent will validate the schema, execute batch precursor analysis, and store them in the SQLite warehouse.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        uploaded_file = st.file_uploader("Choose a JSON report dataset", type=["json"])
+        
+        sample_batch_btn = st.button("📋 Load Sample Batch JSON (3 Reports)")
+        batch_data = None
+
+        if sample_batch_btn:
+            batch_data = [
+                {
+                    "facility": "Plant Alpha - Midwest Complex",
+                    "department": "High-Bay Warehousing & Logistics",
+                    "location_specific": "Battery Charging Dock Bay 4",
+                    "equipment_involved": "Hyster Reach Truck",
+                    "raw_text": "Battery hoist chain had a cracked master link. Operator noticed link opening under 2,000 lb load before battery was lifted clear of chassis."
+                },
+                {
+                    "facility": "Plant Beta - Gulf Coast Refinery",
+                    "department": "Chemical Processing & Synthesis",
+                    "location_specific": "Benzene Stripper Column C-201",
+                    "equipment_involved": "Pressure Relief Valve PRV-201",
+                    "raw_text": "Car-seal on manual block valve upstream of PRV-201 was cut and valve was throttled 50 percent shut during routine shift turnover."
+                },
+                {
+                    "facility": "Facility Delta - Apex Logistics Hub",
+                    "department": "Plant Facilities & Maintenance",
+                    "location_specific": "Main Air Compressor Room",
+                    "equipment_involved": "Sullair 150HP Screw Compressor",
+                    "raw_text": "High temperature cutoff sensor was unplugged and taped with electrical tape to keep compressor running despite overheating oil alarm."
+                }
+            ]
+            st.session_state["staged_batch_data"] = batch_data
+
+        if uploaded_file is not None:
+            try:
+                batch_data = json.load(uploaded_file)
+                st.session_state["staged_batch_data"] = batch_data
+            except Exception as e:
+                st.error(f"Invalid JSON file format: {e}")
+
+        if "staged_batch_data" in st.session_state and st.session_state["staged_batch_data"]:
+            staged = st.session_state["staged_batch_data"]
+            st.success(f"Successfully staged {len(staged)} report(s) for batch processing.")
+            st.json(staged[:2])
+
+            if st.button("⚡ Ingest & Analyze Batch Reports", use_container_width=True):
+                progress_bar = st.progress(0.0)
+                status_text = st.empty()
+
+                for i, item in enumerate(staged):
+                    status_text.text(f"Processing report {i+1} of {len(staged)}: {item.get('department', 'General')}...")
+                    agent.analyze_report(
+                        raw_text=item.get("raw_text", "No text"),
+                        department=item.get("department", "General Operations"),
+                        location=item.get("location_specific", "Facility Floor"),
+                        facility=item.get("facility", "Industrial Plant"),
+                        equipment=item.get("equipment_involved", "N/A"),
+                    )
+                    progress_bar.progress((i + 1) / len(staged))
+                    time.sleep(0.1)
+
+                status_text.text("Batch processing complete! All records added to warehouse.")
+                st.success(f"Ingested and scored {len(staged)} reports successfully.")
+                st.session_state.pop("staged_batch_data", None)
+                st.rerun()
+
+    # -------------------------------------------------------------------------
+    # Render Latest Agent Analysis Output Card
+    # -------------------------------------------------------------------------
     if "latest_trace" in st.session_state and st.session_state["latest_trace"].final_enriched_report:
         trace = st.session_state["latest_trace"]
         rep = trace.final_enriched_report
         ext = rep.extraction
         ass = rep.assessment
 
-        st.markdown("<div style='height: 15px;'></div>", unsafe_allow_html=True)
-        st.markdown("<div class='section-header'>🎯 Agent Classification & Risk Extraction</div>", unsafe_allow_html=True)
+        st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div class="view-title">
+                <span>🎯 Agent Precursor Extraction & Classification</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-        badge_class = f"badge-{ass.risk_level.value.lower()}"
+        risk_class = ass.risk_level.value.lower()
         st.markdown(
             f"""
-            <div class="glass-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="glass-panel" style="border-left: 4px solid var(--neon-{ 'red' if risk_class == 'high' else ('amber' if risk_class == 'medium' else 'green') });">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <div>
-                        <span style="font-size: 1.15rem; font-weight: 700; color: #f8fafc;">{ext.primary_hazard}</span>
-                        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">Report ID: <code>{rep.report.id}</code> | Category: <b>{ext.hazard_category.value}</b></div>
+                        <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{ext.primary_hazard}</span>
+                        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
+                            Report ID: <code>{rep.report.id}</code> | Category: <b>{ext.hazard_category.value}</b>
+                        </div>
                     </div>
-                    <div>
-                        <span class="badge {badge_class}">{ass.risk_level.value} Risk</span>
-                        <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); margin-left: 6px;">Score: {ass.risk_score}/10</span>
+                    <div style="display: flex; gap: 8px;">
+                        <span class="badge-pill {risk_class}">{ass.risk_level.value} Risk</span>
+                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
+                            Severity: {ass.risk_score}/10
+                        </span>
                     </div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 8px; margin-bottom: 14px; border-left: 3px solid #38bdf8;">
-                    <b>Agent Technical Rationale:</b> {ass.rationale}
+                
+                <div style="background: rgba(15, 23, 42, 0.65); padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5;">
+                    <b>Agent Reasoning Rationale:</b> {ass.rationale}
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 10px;">
-                    <div>
-                        <div style="font-size: 0.82rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">⚠️ Precursor Signals Detected</div>
-                        <ul style="margin-top: 6px; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                            ⚠️ Precursor Signals Detected
+                        </div>
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
                             {''.join([f'<li>{p}</li>' for p in ext.precursor_events])}
                         </ul>
                     </div>
-                    <div>
-                        <div style="font-size: 0.82rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">🛡️ Failed Safeguards</div>
-                        <ul style="margin-top: 6px; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
+                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                            🛡️ Safeguard Deficits
+                        </div>
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
                             {''.join([f'<li>{s}</li>' for s in ext.failed_safeguards])}
                         </ul>
                     </div>
-                    <div>
-                        <div style="font-size: 0.82rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">📜 OSHA Grounded Citations</div>
-                        <ul style="margin-top: 6px; padding-left: 18px; font-size: 0.88rem; color: #38bdf8;">
+                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
+                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                            📜 OSHA Citations (Grounded)
+                        </div>
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #38bdf8;">
                             {''.join([f'<li><code>{c}</code></li>' for c in ass.osha_citations])}
                         </ul>
                     </div>
                 </div>
-                <div style="margin-top: 12px; font-size: 0.88rem; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 6px;">
-                    <b>Recommended Action:</b> {ext.recommended_mitigation}
+                
+                <div style="margin-top: 14px; font-size: 0.88rem; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 12px 16px; border-radius: 8px;">
+                    <b>Actionable Mitigation:</b> {ext.recommended_mitigation}
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
+
+
+def _execute_agent_analysis(agent, text, dept, loc, equipment):
+    """Executes agent pipeline with live visual spinner feedback."""
+    with st.spinner("Agent running perception scans, OSHA vector grounding, and severity calculation..."):
+        trace = agent.analyze_report(
+            raw_text=text,
+            department=dept,
+            location=loc,
+            equipment=equipment,
+        )
+        st.session_state["latest_trace"] = trace
+        st.success(f"Analysis completed for Report {trace.report_id}!")
