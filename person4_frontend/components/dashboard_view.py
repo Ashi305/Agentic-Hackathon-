@@ -24,12 +24,12 @@ def render_dashboard_view(df: pd.DataFrame):
         f_col1, f_col2, f_col3 = st.columns([4, 4, 4])
         with f_col1:
             departments = ["All Departments"] + sorted(df["department"].dropna().unique().tolist())
-            selected_dept = st.selectbox("🏢 Filter by Operating Department:", departments)
+            selected_dept = st.selectbox("Department Filter:", departments)
         with f_col2:
             facilities = ["All Facilities"] + sorted(df["facility"].dropna().unique().tolist()) if "facility" in df.columns else ["All Facilities"]
-            selected_fac = st.selectbox("📍 Filter by Facility Site:", facilities)
+            selected_fac = st.selectbox("Facility Complex Filter:", facilities)
         with f_col3:
-            risk_filter = st.selectbox("⚡ Filter by Risk Tier:", ["All Risk Levels", "High", "Medium", "Low"])
+            risk_filter = st.selectbox("Risk Level Filter:", ["All Risk Levels", "High", "Medium", "Low"])
 
     # Apply filters
     filtered_df = df.copy()
@@ -54,7 +54,7 @@ def render_dashboard_view(df: pd.DataFrame):
             <div class="kpi-wrapper">
                 <div class="kpi-label">Observations Ingested</div>
                 <div class="kpi-number">{kpis['total_reports']}</div>
-                <div class="kpi-footer">Across Active Operating Zones</div>
+                <div class="kpi-footer">Active Operating Zones</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -76,7 +76,7 @@ def render_dashboard_view(df: pd.DataFrame):
             <div class="kpi-wrapper warning">
                 <div class="kpi-label">SIF Precursors (Fatal)</div>
                 <div class="kpi-number" style="color: #fcd34d;">{kpis['sif_escalations']}</div>
-                <div class="kpi-footer">Barrier Failure Warning Signs</div>
+                <div class="kpi-footer">Critical Barrier Deficits</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -86,7 +86,7 @@ def render_dashboard_view(df: pd.DataFrame):
             f"""
             <div class="kpi-wrapper">
                 <div class="kpi-label">Average Risk Severity</div>
-                <div class="kpi-number" style="color: #38bdf8;">{kpis['avg_risk_score']}<span style="font-size: 1rem; color: #64748b;">/10</span></div>
+                <div class="kpi-number" style="color: #38bdf8;">{kpis['avg_risk_score']}<span style="font-size: 1rem; color: #94a3b8;">/10</span></div>
                 <div class="kpi-footer">Deterministic Score Index</div>
             </div>
             """,
@@ -98,7 +98,7 @@ def render_dashboard_view(df: pd.DataFrame):
             <div class="kpi-wrapper purple">
                 <div class="kpi-label">Human Overrides</div>
                 <div class="kpi-number" style="color: #c084fc;">{kpis['override_count']}</div>
-                <div class="kpi-footer">Active Dynamic Few-Shot Pool</div>
+                <div class="kpi-footer">Active Few-Shot Exemplars</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -111,8 +111,8 @@ def render_dashboard_view(df: pd.DataFrame):
     alert_summary = PrecursorPatternClusterer.generate_executive_theme_summary(clusters)
     st.markdown(
         f"""
-        <div class="glass-panel" style="border-left: 4px solid #f43f5e; padding: 18px 22px;">
-            <div style="font-size: 0.95rem; line-height: 1.6; color: #e2e8f0;">
+        <div class="glass-panel" style="border-left: 4px solid #f43f5e; padding: 18px 22px; background: #0f172a;">
+            <div style="font-size: 0.95rem; line-height: 1.6; color: #f1f5f9;">
                 {alert_summary.replace(chr(10), '<br>')}
             </div>
         </div>
@@ -120,14 +120,14 @@ def render_dashboard_view(df: pd.DataFrame):
         unsafe_allow_html=True,
     )
 
-    # 3. Interactive Plotly Charts Row 1 (Hierarchical Sunburst/Treemap & Calibrated Donut)
+    # 3. Interactive Plotly Charts Row 1
     col_chart1, col_chart2 = st.columns([6, 4])
 
     with col_chart1:
         st.markdown(
             """
             <div class="view-title">
-                <span>🌐 Operational Hazard Hierarchy</span>
+                Operational Hazard Hierarchy
             </div>
             """,
             unsafe_allow_html=True,
@@ -139,7 +139,6 @@ def render_dashboard_view(df: pd.DataFrame):
             label_visibility="collapsed"
         )
 
-        # Build hierarchy DataFrame
         hierarchy_df = filtered_df.copy()
         if "hazard_category" not in hierarchy_df.columns:
             hierarchy_df["hazard_category"] = "General"
@@ -165,7 +164,7 @@ def render_dashboard_view(df: pd.DataFrame):
         fig_hierarchy.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+            font=dict(color="#f8fafc", family="Plus Jakarta Sans", size=12),
             margin=dict(t=10, b=10, l=10, r=10),
         )
         st.plotly_chart(fig_hierarchy, use_container_width=True)
@@ -174,7 +173,7 @@ def render_dashboard_view(df: pd.DataFrame):
         st.markdown(
             """
             <div class="view-title">
-                <span>⚡ Calibrated Risk Distribution</span>
+                Calibrated Risk Distribution
             </div>
             """,
             unsafe_allow_html=True,
@@ -191,7 +190,8 @@ def render_dashboard_view(df: pd.DataFrame):
         fig_donut.update_traces(
             textposition='inside',
             textinfo='percent+label',
-            marker=dict(line=dict(color='#0b0f19', width=2))
+            marker=dict(line=dict(color='#070c18', width=2)),
+            textfont=dict(color='#ffffff', size=13)
         )
         fig_donut.update_layout(
             paper_bgcolor="rgba(0,0,0,0)",
@@ -199,18 +199,18 @@ def render_dashboard_view(df: pd.DataFrame):
             font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
             margin=dict(t=20, b=20, l=20, r=20),
             showlegend=False,
-            annotations=[dict(text=f"<b>{kpis['total_reports']}</b><br><span style='font-size:12px;color:#94a3b8;'>REPORTS</span>", x=0.5, y=0.5, font_size=20, font_color="#ffffff", showarrow=False)]
+            annotations=[dict(text=f"<b>{kpis['total_reports']}</b><br><span style='font-size:12px;color:#cbd5e1;'>REPORTS</span>", x=0.5, y=0.5, font_size=20, font_color="#ffffff", showarrow=False)]
         )
         st.plotly_chart(fig_donut, use_container_width=True)
 
-    # 4. Interactive Plotly Charts Row 2 (Hotspot Bar & Precursor Frequency)
+    # 4. Interactive Plotly Charts Row 2
     col_chart3, col_chart4 = st.columns([5, 5])
 
     with col_chart3:
         st.markdown(
             """
             <div class="view-title">
-                <span>🔥 Facility Zone Hotspot Index</span>
+                Facility Zone Hotspot Index
             </div>
             """,
             unsafe_allow_html=True,
@@ -230,9 +230,10 @@ def render_dashboard_view(df: pd.DataFrame):
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+                xaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                yaxis=dict(autorange="reversed", color="#cbd5e1"),
                 margin=dict(t=10, b=10, l=10, r=10),
-                yaxis=dict(autorange="reversed"),
-                coloraxis_colorbar=dict(title="High Risk", thickness=12, len=0.7),
+                coloraxis_colorbar=dict(title=dict(text="High Risk", font=dict(color="#f8fafc")), tickfont=dict(color="#cbd5e1"), thickness=12, len=0.7),
             )
             st.plotly_chart(fig_hotspot, use_container_width=True)
 
@@ -240,7 +241,7 @@ def render_dashboard_view(df: pd.DataFrame):
         st.markdown(
             """
             <div class="view-title">
-                <span>🚨 Top Recurring Precursor Signals</span>
+                Top Recurring Precursor Signals
             </div>
             """,
             unsafe_allow_html=True,
@@ -260,8 +261,9 @@ def render_dashboard_view(df: pd.DataFrame):
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
                 font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+                xaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                yaxis=dict(autorange="reversed", color="#cbd5e1"),
                 margin=dict(t=10, b=10, l=10, r=10),
-                yaxis=dict(autorange="reversed"),
                 coloraxis_showscale=False,
             )
             st.plotly_chart(fig_precursors, use_container_width=True)
@@ -270,7 +272,7 @@ def render_dashboard_view(df: pd.DataFrame):
     st.markdown(
         """
         <div class="view-title" style="margin-top: 14px;">
-            <span>🔍 Cross-Report Precursor Theme Clusters</span>
+            Cross-Report Precursor Theme Clusters
         </div>
         """,
         unsafe_allow_html=True,

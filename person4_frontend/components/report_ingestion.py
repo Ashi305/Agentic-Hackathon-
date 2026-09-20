@@ -67,7 +67,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
     st.markdown(
         """
         <div class="view-title">
-            <span>📥 Multi-Modal Safety Observation Ingestion</span>
+            Multi-Modal Safety Observation Ingestion
         </div>
         """,
         unsafe_allow_html=True,
@@ -75,17 +75,17 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
 
     ingestion_mode = st.radio(
         "Select Ingestion Modality:",
-        ["✍️ Structured Free-Text Narrative", "🎙️ Radio / Voice Transcript Simulator", "📂 Batch JSON File Ingestion"],
+        ["Structured Free-Text Narrative", "Radio / Voice Transcript Simulator", "Batch JSON File Ingestion"],
         horizontal=True,
     )
 
     # -------------------------------------------------------------------------
     # MODALITY 1: Structured Free-Text Narrative
     # -------------------------------------------------------------------------
-    if ingestion_mode == "✍️ Structured Free-Text Narrative":
+    if ingestion_mode == "Structured Free-Text Narrative":
         st.markdown(
             """
-            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
                 Input free-text incident observations directly or select pre-calibrated operational test scenarios to evaluate agent reasoning.
             </div>
             """,
@@ -93,7 +93,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
         )
 
         preset_choice = st.selectbox(
-            "⚡ Quick-Fill Operational Test Scenarios:",
+            "Quick-Fill Operational Test Scenarios:",
             ["Custom Narrative (Type Manually)"] + list(PRESET_SCENARIOS.keys()),
         )
 
@@ -125,7 +125,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
                 placeholder="Describe unsafe conditions, precursor events, actions taken, and potential escalation risks...",
             )
 
-            submit_btn = st.form_submit_button("🚀 Run Agent Reasoner & Ingest", use_container_width=True)
+            submit_btn = st.form_submit_button("Run Agent Reasoner & Ingest", use_container_width=True)
 
         if submit_btn:
             if not text_val.strip():
@@ -136,18 +136,18 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
     # -------------------------------------------------------------------------
     # MODALITY 2: Field Audio / Walkie-Talkie Simulation
     # -------------------------------------------------------------------------
-    elif ingestion_mode == "🎙️ Radio / Voice Transcript Simulator":
+    elif ingestion_mode == "Radio / Voice Transcript Simulator":
         st.markdown(
             """
-            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
-                Simulates real-world two-way radio walkie-talkie field communications and speech-to-text audio perception feeds.
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+                Simulates real-world two-way radio communications and speech-to-text audio perception feeds.
             </div>
             """,
             unsafe_allow_html=True,
         )
 
         radio_choice = st.selectbox(
-            "Select Field Radio Channel & Walkie-Talkie Feed:",
+            "Select Field Radio Channel & Feed:",
             list(RADIO_VOICE_MEMOS.keys())
         )
         memo = RADIO_VOICE_MEMOS[radio_choice]
@@ -157,20 +157,19 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
             f"""
             <div class="audio-deck">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="pulse-dot"></span>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; text-transform: uppercase;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; font-family: 'JetBrains Mono';">
                         [LIVE RECEPTION: {memo['channel']}]
                     </span>
                 </div>
-                <div style="display: flex; align-items: center; gap: 4px; height: 28px;">
+                <div style="display: flex; align-items: center; gap: 4px; height: 26px;">
                     <span class="waveform-bar" style="animation-delay: 0.1s; height: 18px;"></span>
                     <span class="waveform-bar" style="animation-delay: 0.4s; height: 26px;"></span>
                     <span class="waveform-bar" style="animation-delay: 0.2s; height: 12px;"></span>
                     <span class="waveform-bar" style="animation-delay: 0.5s; height: 22px;"></span>
                     <span class="waveform-bar" style="animation-delay: 0.3s; height: 15px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.6s; height: 28px;"></span>
+                    <span class="waveform-bar" style="animation-delay: 0.6s; height: 26px;"></span>
                 </div>
-                <div style="margin-left: auto; font-size: 0.82rem; color: #94a3b8;">
+                <div style="margin-left: auto; font-size: 0.82rem; color: #cbd5e1;">
                     Speaker: <b>{memo['speaker']}</b> | Codec: <code>Opus/16kHz</code>
                 </div>
             </div>
@@ -179,7 +178,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
         )
 
         st.markdown("**Perceived Audio Speech-to-Text Transcript:**")
-        st.info(f"📻 \"{memo['raw_audio_transcript']}\"")
+        st.info(f"\"{memo['raw_audio_transcript']}\"")
 
         col_v1, col_v2 = st.columns(2)
         with col_v1:
@@ -187,7 +186,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
         with col_v2:
             voice_loc = st.text_input("Operational Area", value="Radio Sector Broadcast Zone")
 
-        if st.button("🎙️ Process Radio Transmission Through Agent", use_container_width=True):
+        if st.button("Process Radio Transmission Through Agent", use_container_width=True):
             _execute_agent_analysis(
                 agent,
                 f"[RADIO DISPATCH TRANSCRIPT]: {memo['raw_audio_transcript']}",
@@ -199,11 +198,11 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
     # -------------------------------------------------------------------------
     # MODALITY 3: Batch JSON File Ingestion
     # -------------------------------------------------------------------------
-    elif ingestion_mode == "📂 Batch JSON File Ingestion":
+    elif ingestion_mode == "Batch JSON File Ingestion":
         st.markdown(
             """
-            <div style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 12px;">
-                Upload multiple historical safety reports formatted as JSON. The agent will validate the schema, execute batch precursor analysis, and store them in the SQLite warehouse.
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+                Upload multiple historical safety reports formatted as JSON. The agent validates the schema, executes batch precursor analysis, and stores records in the warehouse.
             </div>
             """,
             unsafe_allow_html=True,
@@ -211,7 +210,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
 
         uploaded_file = st.file_uploader("Choose a JSON report dataset", type=["json"])
         
-        sample_batch_btn = st.button("📋 Load Sample Batch JSON (3 Reports)")
+        sample_batch_btn = st.button("Load Sample Batch JSON (3 Reports)")
         batch_data = None
 
         if sample_batch_btn:
@@ -252,7 +251,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
             st.success(f"Successfully staged {len(staged)} report(s) for batch processing.")
             st.json(staged[:2])
 
-            if st.button("⚡ Ingest & Analyze Batch Reports", use_container_width=True):
+            if st.button("Ingest & Analyze Batch Reports", use_container_width=True):
                 progress_bar = st.progress(0.0)
                 status_text = st.empty()
 
@@ -286,7 +285,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
         st.markdown(
             """
             <div class="view-title">
-                <span>🎯 Agent Precursor Extraction & Classification</span>
+                Agent Precursor Extraction & Classification
             </div>
             """,
             unsafe_allow_html=True,
@@ -295,7 +294,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
         risk_class = ass.risk_level.value.lower()
         st.markdown(
             f"""
-            <div class="glass-panel" style="border-left: 4px solid var(--neon-{ 'red' if risk_class == 'high' else ('amber' if risk_class == 'medium' else 'green') });">
+            <div class="glass-panel" style="border-left: 4px solid var(--tier-{ 'high' if risk_class == 'high' else ('medium' if risk_class == 'medium' else 'low') });">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <div>
                         <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{ext.primary_hazard}</span>
@@ -305,36 +304,36 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <span class="badge-pill {risk_class}">{ass.risk_level.value} Risk</span>
-                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
+                        <span class="badge-pill neutral">
                             Severity: {ass.risk_score}/10
                         </span>
                     </div>
                 </div>
                 
-                <div style="background: rgba(15, 23, 42, 0.65); padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5;">
-                    <b>Agent Reasoning Rationale:</b> {ass.rationale}
+                <div style="background: #0b1120; padding: 14px 18px; border-radius: 8px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5; color: #f1f5f9;">
+                    <b style="color: #38bdf8;">Agent Reasoning Rationale:</b> {ass.rationale}
                 </div>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
-                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
-                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            ⚠️ Precursor Signals Detected
+                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                            Precursor Signals Detected
                         </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
                             {''.join([f'<li>{p}</li>' for p in ext.precursor_events])}
                         </ul>
                     </div>
-                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
-                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            🛡️ Safeguard Deficits
+                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                            Safeguard Deficits
                         </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f1f5f9;">
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
                             {''.join([f'<li>{s}</li>' for s in ext.failed_safeguards])}
                         </ul>
                     </div>
-                    <div style="background: rgba(11, 17, 30, 0.6); padding: 14px; border-radius: 10px;">
-                        <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
-                            📜 OSHA Citations (Grounded)
+                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                            OSHA Citations (Grounded)
                         </div>
                         <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #38bdf8;">
                             {''.join([f'<li><code>{c}</code></li>' for c in ass.osha_citations])}
@@ -342,7 +341,7 @@ def render_report_ingestion(agent: IncidentPrecursorAgent):
                     </div>
                 </div>
                 
-                <div style="margin-top: 14px; font-size: 0.88rem; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 12px 16px; border-radius: 8px;">
+                <div style="margin-top: 14px; font-size: 0.88rem; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
                     <b>Actionable Mitigation:</b> {ext.recommended_mitigation}
                 </div>
             </div>

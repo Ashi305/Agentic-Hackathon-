@@ -13,11 +13,11 @@ def render_agent_investigation_ui():
     st.markdown(
         """
         <div class="view-title">
-            <span>🔬 Agent Reasoning & Tool Orchestration Inspector</span>
+            Agent Reasoning & Tool Orchestration Inspector
         </div>
-        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 16px;">
-            Full glass-box observability into the multi-step ReAct reasoning process executed by <code>IncidentPrecursorAgent</code>,
-            including decorated tool calls (<code>@tool</code>), latency, retrieved regulatory citations, and dynamic few-shot injection.
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">
+            Full observability into the multi-step ReAct reasoning process executed by <code>IncidentPrecursorAgent</code>,
+            including decorated tool calls (<code>@tool</code>), execution latency, retrieved regulatory citations, and dynamic few-shot injection.
         </p>
         """,
         unsafe_allow_html=True,
@@ -83,7 +83,7 @@ def render_agent_investigation_ui():
     st.markdown(
         """
         <div class="view-title" style="font-size: 1.15rem;">
-            <span>🪜 Sequential Reasoning Execution Trace</span>
+            Sequential Reasoning Execution Trace
         </div>
         """,
         unsafe_allow_html=True,
@@ -91,7 +91,7 @@ def render_agent_investigation_ui():
     for step in trace.steps_executed:
         st.markdown(
             f"""
-            <div style="background: rgba(15, 23, 42, 0.7); border-left: 3px solid #38bdf8; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 8px 8px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #cbd5e1;">
+            <div style="background: #0d1527; border-left: 3px solid #38bdf8; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 8px 8px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #f1f5f9; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
                 {step}
             </div>
             """,
@@ -103,14 +103,14 @@ def render_agent_investigation_ui():
     st.markdown(
         """
         <div class="view-title" style="font-size: 1.15rem;">
-            <span>🛠️ Decorated Tool Calls (@tool) & Verifiable Deterministic Logic</span>
+            Decorated Tool Calls (@tool) & Verifiable Deterministic Logic
         </div>
         """,
         unsafe_allow_html=True,
     )
 
     for idx, tc in enumerate(trace.tool_calls, start=1):
-        with st.expander(f"Tool Call #{idx}: `{tc.tool_name}` — Execution Time: {tc.execution_time_ms} ms", expanded=True):
+        with st.expander(f"Tool Call #{idx}: `{tc.tool_name}` — Latency: {tc.execution_time_ms} ms", expanded=True):
             t_col1, t_col2 = st.columns(2)
             with t_col1:
                 st.markdown("**Tool Arguments (Typed Input):**")
@@ -124,7 +124,7 @@ def render_agent_investigation_ui():
     st.markdown(
         """
         <div class="view-title" style="font-size: 1.15rem;">
-            <span>📚 Grounded OSHA Regulatory Citations</span>
+            Grounded OSHA Regulatory Citations
         </div>
         """,
         unsafe_allow_html=True,
@@ -132,7 +132,7 @@ def render_agent_investigation_ui():
     if trace.retrieved_citations:
         st.markdown(
             f"""
-            <div class="glass-panel" style="padding: 14px 20px;">
+            <div class="glass-panel" style="padding: 14px 20px; background: #0f172a;">
                 <div style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.6;">
                     The following OSHA standards were retrieved via vector RAG and incorporated into the reasoning benchmark:
                 </div>
@@ -149,7 +149,7 @@ def render_agent_investigation_ui():
     # Export Full JSON Trace
     st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
     st.download_button(
-        label="📥 Export Full Execution Trace (JSON)",
+        label="Export Full Execution Trace (JSON)",
         data=trace.model_dump_json(indent=2),
         file_name=f"agent_trace_{trace.report_id}.json",
         mime="application/json",

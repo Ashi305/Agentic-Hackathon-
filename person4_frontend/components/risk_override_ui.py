@@ -15,10 +15,10 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
     st.markdown(
         """
         <div class="view-title">
-            <span>⚖️ Safety Officer Override Hub & Active Few-Shot Memory</span>
+            Safety Officer Override Hub & Active Few-Shot Memory
         </div>
-        <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 16px;">
-            <b>Compulsory Hackathon Add-On:</b> When a senior safety officer overrides any automated risk score,
+        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">
+            <b>Compulsory Add-On Requirement:</b> When an EHS safety officer overrides an automated risk score,
             the correction and its operational rationale are stored in SQLite and dynamically injected as few-shot
             exemplars into subsequent agent reasoning cycles.
         </p>
@@ -77,8 +77,8 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
     with col_left:
         st.markdown(
             """
-            <div style="font-size: 0.95rem; font-weight: 700; color: #f8fafc; margin-bottom: 8px;">
-                📋 Current Automated Assessment
+            <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                Current Automated Assessment
             </div>
             """,
             unsafe_allow_html=True,
@@ -99,7 +99,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                     {e.primary_hazard}
                 </div>
                 
-                <div style="background: rgba(15, 23, 42, 0.65); padding: 12px; border-radius: 8px; font-size: 0.86rem; color: #cbd5e1; margin-bottom: 12px; max-height: 110px; overflow-y: auto;">
+                <div style="background: #0b1120; padding: 12px; border-radius: 8px; font-size: 0.86rem; color: #f1f5f9; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); max-height: 110px; overflow-y: auto;">
                     <b>Narrative:</b> <i>"{r.raw_text}"</i>
                 </div>
                 
@@ -115,7 +115,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                     {f'<span class="badge-pill override">Previously Overridden</span>' if has_prior_override else ''}
                 </div>
                 
-                <div style="font-size: 0.83rem; color: #94a3b8; line-height: 1.4;">
+                <div style="font-size: 0.83rem; color: #cbd5e1; line-height: 1.5;">
                     <b>Model Rationale:</b> {a.rationale}
                 </div>
             </div>
@@ -126,8 +126,8 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
     with col_right:
         st.markdown(
             """
-            <div style="font-size: 0.95rem; font-weight: 700; color: #f8fafc; margin-bottom: 8px;">
-                ✏️ Safety Officer Calibration Console
+            <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                Safety Officer Calibration Console
             </div>
             """,
             unsafe_allow_html=True,
@@ -141,16 +141,13 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                 curr_idx = risk_tiers.index(effective_risk.value) if effective_risk.value in risk_tiers else 1
                 new_risk_tier = st.selectbox("Calibrated Risk Tier:", risk_tiers, index=curr_idx)
 
-            # Live Diff Badge Preview
-            diff_arrow = "➔"
-            preview_color = "#f43f5e" if new_risk_tier == "High" else ("#fbbf24" if new_risk_tier == "Medium" else "#10b981")
             st.markdown(
                 f"""
-                <div style="background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 8px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">
+                <div style="background: #0b1120; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">
                     <span style="font-size: 0.82rem; color: #94a3b8;">Calibration Delta:</span>
                     <span>
                         <span class="badge-pill {effective_risk.value.lower()}">{effective_risk.value}</span>
-                        <span style="margin: 0 6px; color: #94a3b8;">{diff_arrow}</span>
+                        <span style="margin: 0 8px; color: #94a3b8;">➔</span>
                         <span class="badge-pill {new_risk_tier.lower()}">{new_risk_tier}</span>
                     </span>
                 </div>
@@ -167,7 +164,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
             char_count = len(rationale_text.strip())
             st.caption(f"Justification Length: {char_count} characters (Minimum 8 required)")
 
-            commit_btn = st.form_submit_button("💾 Commit Override & Update Few-Shot Memory", use_container_width=True)
+            commit_btn = st.form_submit_button("Commit Override & Update Few-Shot Memory", use_container_width=True)
 
         if commit_btn:
             if char_count < 8:
@@ -182,7 +179,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                     timestamp=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                 )
                 storage.log_override(override_rec)
-                st.success(f"✅ Override committed for {selected_id}! Dynamic few-shot prompt memory updated.")
+                st.success(f"Override committed for {selected_id}. Dynamic few-shot prompt memory updated.")
                 st.rerun()
 
     # -------------------------------------------------------------------------
@@ -192,9 +189,9 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
     st.markdown(
         """
         <div class="view-title">
-            <span>🧠 Active Dynamic Few-Shot Prompt Memory (Live View)</span>
+            Active Dynamic Few-Shot Prompt Memory (Live View)
         </div>
-        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 12px;">
+        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
             The agent continuously queries the latest human corrections from SQLite and constructs the following
             exemplars into its prompt context to dynamically self-align with senior safety officer decisions.
         </p>
@@ -211,7 +208,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
             direction_color = "#f43f5e" if ov.overridden_risk.value == "High" else ("#fbbf24" if ov.overridden_risk.value == "Medium" else "#10b981")
             st.markdown(
                 f"""
-                <div class="glass-panel" style="border-left: 4px solid {direction_color}; padding: 16px 20px; margin-bottom: 12px;">
+                <div class="glass-panel" style="border-left: 4px solid {direction_color}; padding: 16px 20px; margin-bottom: 12px; background: #0d1527;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <span style="font-weight: 800; color: #ffffff; font-size: 0.95rem;">
                             Pedagogical Exemplar #{idx} — Report Reference: <code>{ov.report_id}</code>
@@ -223,11 +220,11 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                         </div>
                     </div>
                     
-                    <div style="font-size: 0.90rem; color: #e2e8f0; margin: 8px 0;">
+                    <div style="font-size: 0.90rem; color: #f1f5f9; margin: 8px 0;">
                         <b>Officer Guiding Rationale:</b> <i>"{ov.override_reason}"</i>
                     </div>
                     
-                    <div style="font-size: 0.78rem; color: #64748b; display: flex; justify-content: space-between;">
+                    <div style="font-size: 0.78rem; color: #94a3b8; display: flex; justify-content: space-between;">
                         <span>Verified by: <code>{ov.safety_officer_id}</code></span>
                         <span>Logged: {ov.timestamp} UTC</span>
                     </div>
@@ -236,7 +233,6 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFew
                 unsafe_allow_html=True,
             )
 
-        # Raw Prompt Block Expandable Preview
-        with st.expander("🔍 View Raw Formatted Dynamic Few-Shot Prompt Segment"):
+        with st.expander("View Raw Formatted Dynamic Few-Shot Prompt Segment"):
             formatted_prompt_text = few_shot_manager.format_exemplars_for_prompt(recent_overrides)
             st.code(formatted_prompt_text, language="markdown")
