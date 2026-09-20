@@ -7,10 +7,10 @@ import streamlit as st
 import datetime
 from person1_data_pipeline.schema import RiskLevel, RiskOverride
 from person1_data_pipeline.storage import SafetyStorage
-from person2_llm_agent.few_shot_manager import DynamicFewShotManager
+from person4_frontend.agent_service import FrontendFewShotManager
 
 
-def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: DynamicFewShotManager):
+def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFewShotManager):
     """Renders the human-in-the-loop override console and dynamic prompt inspector."""
     st.markdown(
         """

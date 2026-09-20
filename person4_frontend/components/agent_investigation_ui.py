@@ -5,7 +5,7 @@ decorated tool call arguments, execution latencies, and grounded OSHA citations.
 """
 import streamlit as st
 import json
-from person2_llm_agent.agent_orchestrator import AgentExecutionTrace
+from person4_frontend.agent_service import AgentExecutionTrace
 
 
 def render_agent_investigation_ui():

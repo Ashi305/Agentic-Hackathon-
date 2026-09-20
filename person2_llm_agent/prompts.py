@@ -138,3 +138,37 @@ Confidence must be a number between 0 and 1.
 Set human_review_required to true when the classification
 is uncertain or confidence is below 0.60.
 """
+
+
+class PromptFactory:
+    """Adapter class providing backward compatibility for agent orchestrator."""
+    @classmethod
+    def build_extraction_prompt(cls, report: str) -> str:
+        return build_extraction_prompt(report)
+
+    @classmethod
+    def build_classification_prompt(cls, report: str, extracted_data: dict, few_shot_examples: list) -> str:
+        return build_classification_prompt(report, extracted_data, few_shot_examples)
+
+    @classmethod
+    def build_extraction_and_classification_prompt(
+        cls,
+        report_text: str,
+        department: str = "",
+        location: str = "",
+        retrieved_osha_context: str = "",
+        historical_overrides = None
+    ) -> str:
+        few_shots = []
+        if historical_overrides:
+            for ov in historical_overrides:
+                orig = ov.original_risk.value if hasattr(ov, 'original_risk') and hasattr(ov.original_risk, 'value') else str(getattr(ov, 'original_risk', 'Medium'))
+                corr = ov.overridden_risk.value if hasattr(ov, 'overridden_risk') and hasattr(ov.overridden_risk, 'value') else str(getattr(ov, 'overridden_risk', 'High'))
+                reason = getattr(ov, 'override_reason', '')
+                few_shots.append({
+                    "report": getattr(ov, 'report_id', 'Historical Observation'),
+                    "original_label": orig,
+                    "corrected_label": corr,
+                    "reason": reason
+                })
+        return build_classification_prompt(report_text, {"department": department, "location": location, "osha_context": retrieved_osha_context}, few_shots)

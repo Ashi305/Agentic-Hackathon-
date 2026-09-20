@@ -15,8 +15,7 @@ import streamlit as st
 import pandas as pd
 
 from person1_data_pipeline.storage import SafetyStorage
-from person2_llm_agent.agent_orchestrator import IncidentPrecursorAgent
-from person2_llm_agent.few_shot_manager import DynamicFewShotManager
+from person4_frontend.agent_service import FrontendAgentService, FrontendFewShotManager
 from person4_frontend.components import (
     render_dashboard_view,
     render_report_ingestion,
@@ -40,11 +39,11 @@ def init_app_state():
         st.session_state["storage"] = storage
 
     if "agent" not in st.session_state:
-        agent = IncidentPrecursorAgent(storage=st.session_state["storage"])
+        agent = FrontendAgentService(storage=st.session_state["storage"])
         st.session_state["agent"] = agent
 
     if "few_shot_manager" not in st.session_state:
-        st.session_state["few_shot_manager"] = DynamicFewShotManager(storage=st.session_state["storage"])
+        st.session_state["few_shot_manager"] = FrontendFewShotManager(storage=st.session_state["storage"])
 
 
 def main():
@@ -58,8 +57,8 @@ def main():
     init_app_state()
 
     storage: SafetyStorage = st.session_state["storage"]
-    agent: IncidentPrecursorAgent = st.session_state["agent"]
-    few_shot_manager: DynamicFewShotManager = st.session_state["few_shot_manager"]
+    agent: FrontendAgentService = st.session_state["agent"]
+    few_shot_manager: FrontendFewShotManager = st.session_state["few_shot_manager"]
 
     # Sidebar Navigation & System Monitor
     with st.sidebar:

@@ -8,7 +8,7 @@ import json
 import time
 from typing import List, Dict, Any
 from person1_data_pipeline.schema import NearMissReport
-from person2_llm_agent.agent_orchestrator import IncidentPrecursorAgent
+from person4_frontend.agent_service import FrontendAgentService
 
 PRESET_SCENARIOS = {
     "Acid Flange Spray Shield Defect (High Risk Precursor)": {
@@ -62,7 +62,7 @@ RADIO_VOICE_MEMOS = {
 }
 
 
-def render_report_ingestion(agent: IncidentPrecursorAgent):
+def render_report_ingestion(agent: FrontendAgentService):
     """Renders the multi-modal report ingestion hub."""
     st.markdown(
         """
