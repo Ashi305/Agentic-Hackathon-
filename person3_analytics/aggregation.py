@@ -165,3 +165,82 @@ class SafetyAggregator:
             "escalations_by_officer": escalations,
             "de_escalations_by_officer": de_escalations,
         }
+
+    # ------------------------------------------------------------------
+    # Time Series Analysis
+    # ------------------------------------------------------------------
+
+    @classmethod
+    def get_incident_timeline(cls, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Produces a daily incident count timeline broken down by risk level.
+        Returns columns: date, total, High, Medium, Low.
+        """
+        if df.empty or "timestamp" not in df.columns:
+            return pd.DataFrame(columns=["date", "total", "High", "Medium", "Low"])
+
+        ts = df.copy()
+        ts["date"] = pd.to_datetime(ts["timestamp"], errors="coerce").dt.date
+        ts = ts.dropna(subset=["date"])
+
+        daily_total = ts.groupby("date").size().reset_index(name="total")
+
+        # Pivot risk levels into separate columns
+        risk_pivot = (
+            ts.groupby(["date", "effective_risk_level"])
+            .size()
+            .unstack(fill_value=0)
+            .reset_index()
+        )
+        for level in ["High", "Medium", "Low"]:
+            if level not in risk_pivot.columns:
+                risk_pivot[level] = 0
+
+        merged = daily_total.merge(risk_pivot[["date", "High", "Medium", "Low"]], on="date", how="left").fillna(0)
+        merged = merged.sort_values("date")
+        return merged
+
+    @classmethod
+    def get_cumulative_risk_trend(cls, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Calculates a cumulative average risk score over time.
+        Useful for spotting whether overall site risk is trending up or down.
+        Returns columns: date, daily_avg_score, cumulative_avg_score.
+        """
+        if df.empty or "timestamp" not in df.columns:
+            return pd.DataFrame(columns=["date", "daily_avg_score", "cumulative_avg_score"])
+
+        ts = df.copy()
+        ts["date"] = pd.to_datetime(ts["timestamp"], errors="coerce").dt.date
+        ts = ts.dropna(subset=["date"])
+
+        daily = ts.groupby("date").agg(
+            daily_avg_score=("risk_score", "mean"),
+            report_count=("report_id", "count"),
+        ).reset_index().sort_values("date")
+
+        daily["daily_avg_score"] = daily["daily_avg_score"].round(2)
+        daily["cumulative_avg_score"] = daily["daily_avg_score"].expanding().mean().round(2)
+        return daily
+
+    @classmethod
+    def get_rolling_severity_index(cls, df: pd.DataFrame, window: int = 7) -> pd.DataFrame:
+        """
+        Computes a rolling-window average of daily risk scores to smooth out
+        noise and highlight underlying severity trends.
+        Returns columns: date, daily_avg_score, rolling_avg_score.
+        """
+        if df.empty or "timestamp" not in df.columns:
+            return pd.DataFrame(columns=["date", "daily_avg_score", "rolling_avg_score"])
+
+        ts = df.copy()
+        ts["date"] = pd.to_datetime(ts["timestamp"], errors="coerce").dt.date
+        ts = ts.dropna(subset=["date"])
+
+        daily = ts.groupby("date")["risk_score"].mean().reset_index()
+        daily.columns = ["date", "daily_avg_score"]
+        daily = daily.sort_values("date")
+        daily["daily_avg_score"] = daily["daily_avg_score"].round(2)
+        daily["rolling_avg_score"] = daily["daily_avg_score"].rolling(window=window, min_periods=1).mean().round(2)
+        return daily
+
