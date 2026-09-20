@@ -115,7 +115,7 @@ def main():
             unsafe_allow_html=True,
         )
 
-        has_gemini = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+        has_gemini = bool((os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "").strip())
         llm_engine_label = "Gemini Cloud API" if has_gemini else "Deterministic Expert Rule Engine"
         st.markdown(
             f"""

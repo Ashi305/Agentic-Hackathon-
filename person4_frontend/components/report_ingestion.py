@@ -1,11 +1,13 @@
 """
 Person 4: Multi-Modal Ingestion Workbench
 Supports Free-Text Observation Forms, Field Audio / Walkie-Talkie Simulation,
-and Batch JSON File Upload with Schema Validation.
+Batch JSON Ingestion, and Direct Ingestion from Person 2's report.csv Dataset.
 """
 import streamlit as st
 import json
 import time
+import os
+import pandas as pd
 from typing import List, Dict, Any
 from person1_data_pipeline.schema import NearMissReport
 from person4_frontend.agent_service import FrontendAgentService
@@ -62,6 +64,31 @@ RADIO_VOICE_MEMOS = {
 }
 
 
+def _get_csv_samples() -> Dict[str, Dict[str, str]]:
+    """Loads sample reports from Person 2's report.csv if present."""
+    samples = {}
+    csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "person2_llm_agent", "report.csv")
+    if os.path.exists(csv_path):
+        try:
+            df = pd.read_csv(csv_path, nrows=10)
+            df = df.dropna(subset=["Report_Text"])
+            for idx, row in df.head(3).iterrows():
+                rep_id = row.get("Report_ID", f"CSV-{idx+1}")
+                loc = str(row.get("Location", "Plant Floor"))
+                dept = str(row.get("Department", "Operations"))
+                severity = str(row.get("Ground_Truth_Severity", "Unknown"))
+                label = f"Dataset Report {rep_id} [{loc}] - Ground Truth: {severity}"
+                samples[label] = {
+                    "dept": dept if dept != "nan" else "Operations",
+                    "loc": loc if loc != "nan" else "Facility Zone",
+                    "equip": "Equipment in zone",
+                    "text": str(row["Report_Text"]),
+                }
+        except Exception:
+            pass
+    return samples
+
+
 def render_report_ingestion(agent: FrontendAgentService):
     """Renders the multi-modal report ingestion hub."""
     st.markdown(
@@ -86,15 +113,18 @@ def render_report_ingestion(agent: FrontendAgentService):
         st.markdown(
             """
             <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
-                Input free-text incident observations directly or select pre-calibrated operational test scenarios to evaluate agent reasoning.
+                Input free-text incident observations directly or select pre-calibrated operational test scenarios from Person 2's dataset.
             </div>
             """,
             unsafe_allow_html=True,
         )
 
+        csv_samples = _get_csv_samples()
+        all_options = ["Custom Narrative (Type Manually)"] + list(PRESET_SCENARIOS.keys()) + list(csv_samples.keys())
+
         preset_choice = st.selectbox(
-            "Quick-Fill Operational Test Scenarios:",
-            ["Custom Narrative (Type Manually)"] + list(PRESET_SCENARIOS.keys()),
+            "Quick-Fill Operational Test Scenarios (Synthetic & Real Benchmark):",
+            all_options,
         )
 
         default_text = ""
@@ -102,8 +132,14 @@ def render_report_ingestion(agent: FrontendAgentService):
         default_loc = "Reactor Bay 3 - Acid Dosing Skid"
         default_equip = "P-104 Sulfuric Acid Metering Pump"
 
-        if preset_choice != "Custom Narrative (Type Manually)":
+        if preset_choice in PRESET_SCENARIOS:
             p = PRESET_SCENARIOS[preset_choice]
+            default_text = p["text"]
+            default_dept = p["dept"]
+            default_loc = p["loc"]
+            default_equip = p["equip"]
+        elif preset_choice in csv_samples:
+            p = csv_samples[preset_choice]
             default_text = p["text"]
             default_dept = p["dept"]
             default_loc = p["loc"]
@@ -152,7 +188,6 @@ def render_report_ingestion(agent: FrontendAgentService):
         )
         memo = RADIO_VOICE_MEMOS[radio_choice]
 
-        # Audio Simulator Deck UI
         st.markdown(
             f"""
             <div class="audio-deck">
@@ -209,7 +244,6 @@ def render_report_ingestion(agent: FrontendAgentService):
         )
 
         uploaded_file = st.file_uploader("Choose a JSON report dataset", type=["json"])
-        
         sample_batch_btn = st.button("Load Sample Batch JSON (3 Reports)")
         batch_data = None
 
@@ -273,7 +307,7 @@ def render_report_ingestion(agent: FrontendAgentService):
                 st.rerun()
 
     # -------------------------------------------------------------------------
-    # Render Latest Agent Analysis Output Card
+    # Render Latest Agent Analysis Output Card (Matching Person 2 Schema Exactly)
     # -------------------------------------------------------------------------
     if "latest_trace" in st.session_state and st.session_state["latest_trace"].final_enriched_report:
         trace = st.session_state["latest_trace"]
@@ -281,15 +315,40 @@ def render_report_ingestion(agent: FrontendAgentService):
         ext = rep.extraction
         ass = rep.assessment
 
+        # Extract Person 2 specific fields if present in trace
+        raw_ext = trace.raw_extraction_data or {}
+        raw_cls = trace.raw_classification_data or {}
+
+        risk_factors = raw_ext.get("risk_factors", ext.precursor_events)
+        hazards = raw_ext.get("hazards", [ext.primary_hazard])
+        missing_info = raw_ext.get("missing_information", [])
+        consequences = raw_ext.get("potential_consequences", ext.failed_safeguards)
+        confidence = float(raw_cls.get("confidence", ass.confidence))
+        human_review_req = bool(raw_cls.get("human_review_required", ass.escalation_potential))
+
         st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
         st.markdown(
             """
             <div class="view-title">
-                Agent Precursor Extraction & Classification
+                Agent Precursor Extraction & Risk Classification
             </div>
             """,
             unsafe_allow_html=True,
         )
+
+        # Human Review Alert if required by Person 2's model
+        if human_review_req:
+            st.markdown(
+                """
+                <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.5); padding: 12px 16px; border-radius: 8px; margin-bottom: 14px;">
+                    <b style="color: #fde68a;">[HUMAN REVIEW REQUIRED]</b>
+                    <span style="color: #f1f5f9; font-size: 0.88rem; margin-left: 8px;">
+                        Model flagged uncertainty (Confidence below 0.60 or critical precursor combination). A safety officer should verify on the Overrides tab.
+                    </span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
         risk_class = ass.risk_level.value.lower()
         st.markdown(
@@ -297,46 +356,49 @@ def render_report_ingestion(agent: FrontendAgentService):
             <div class="glass-panel" style="border-left: 4px solid var(--tier-{ 'high' if risk_class == 'high' else ('medium' if risk_class == 'medium' else 'low') });">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <div>
-                        <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{ext.primary_hazard}</span>
+                        <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{hazards[0] if hazards else ext.primary_hazard}</span>
                         <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
                             Report ID: <code>{rep.report.id}</code> | Category: <b>{ext.hazard_category.value}</b>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
                         <span class="badge-pill {risk_class}">{ass.risk_level.value} Risk</span>
                         <span class="badge-pill neutral">
+                            Confidence: {int(confidence * 100)}%
+                        </span>
+                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
                             Severity: {ass.risk_score}/10
                         </span>
                     </div>
                 </div>
                 
                 <div style="background: #0b1120; padding: 14px 18px; border-radius: 8px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5; color: #f1f5f9;">
-                    <b style="color: #38bdf8;">Agent Reasoning Rationale:</b> {ass.rationale}
+                    <b style="color: #38bdf8;">Agent Reasoning Rationale:</b> {raw_cls.get("reason", ass.rationale)}
                 </div>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
                     <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
                         <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            Precursor Signals Detected
+                            Extracted Risk Factors
                         </div>
                         <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
-                            {''.join([f'<li>{p}</li>' for p in ext.precursor_events])}
+                            {''.join([f'<li>{p}</li>' for p in risk_factors])}
                         </ul>
                     </div>
                     <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
                         <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            Safeguard Deficits
+                            Potential Consequences
                         </div>
                         <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
-                            {''.join([f'<li>{s}</li>' for s in ext.failed_safeguards])}
+                            {''.join([f'<li>{s}</li>' for s in consequences])}
                         </ul>
                     </div>
                     <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
                         <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            OSHA Citations (Grounded)
+                            Missing Information in Report
                         </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #38bdf8;">
-                            {''.join([f'<li><code>{c}</code></li>' for c in ass.osha_citations])}
+                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #fcd34d;">
+                            {''.join([f'<li>{m}</li>' for m in missing_info]) if missing_info else '<li>All essential fields identified.</li>'}
                         </ul>
                     </div>
                 </div>

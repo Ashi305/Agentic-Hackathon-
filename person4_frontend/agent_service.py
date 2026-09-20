@@ -1,7 +1,7 @@
 """
-Person 4: Self-Contained Agent Service & Orchestration Adapter
-Ensures the Frontend runs 100% reliably and independently without crashing,
-even if other teammates are actively editing person2_llm_agent.
+Person 4: Self-Contained Agent Service & Backend Bridge
+Seamlessly integrates with Person 1's SQLite Storage and Person 2's SafetyReportAgent,
+FewShotManager, and RAGEngine, while providing a robust offline deterministic fallback.
 """
 import os
 import re
@@ -9,6 +9,9 @@ import json
 import time
 from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from person1_data_pipeline.schema import (
     NearMissReport,
@@ -36,13 +39,45 @@ class AgentExecutionTrace(BaseModel):
     retrieved_citations: List[str] = Field(default_factory=list)
     dynamic_few_shot_applied: List[str] = Field(default_factory=list)
     llm_provider_used: str = "Deterministic Expert Engine (Offline Guaranteed)"
+    raw_extraction_data: Optional[Dict[str, Any]] = None
+    raw_classification_data: Optional[Dict[str, Any]] = None
     final_enriched_report: Optional[EnrichedReport] = None
 
 
 class FrontendFewShotManager:
-    """Manages active human-in-the-loop overrides for the frontend."""
+    """Bridges Person 1's SQLite storage with Person 2's FewShotManager."""
     def __init__(self, storage: Optional[SafetyStorage] = None):
         self.storage = storage or SafetyStorage()
+        try:
+            from person2_llm_agent.few_shot_manager import FewShotManager
+            self.backend_fsm = FewShotManager()
+            self._sync_backend_fsm()
+        except Exception:
+            self.backend_fsm = None
+
+    def _sync_backend_fsm(self):
+        """Pre-loads recent SQLite overrides into Person 2's in-memory FewShotManager."""
+        if not self.backend_fsm:
+            return
+        self.backend_fsm.clear()
+        for ov in self.get_latest_exemplars(max_examples=10):
+            self.backend_fsm.add_correction(
+                report=ov.report_id,
+                original_label=ov.original_risk.value,
+                corrected_label=ov.overridden_risk.value,
+                reason=ov.override_reason,
+            )
+
+    def log_override(self, override: RiskOverride):
+        """Commits override to SQLite and synchronizes Person 2's FewShotManager."""
+        self.storage.log_override(override)
+        if self.backend_fsm:
+            self.backend_fsm.add_correction(
+                report=override.report_id,
+                original_label=override.original_risk.value,
+                corrected_label=override.overridden_risk.value,
+                reason=override.override_reason,
+            )
 
     def get_latest_exemplars(self, max_examples: int = 5) -> List[RiskOverride]:
         try:
@@ -69,7 +104,7 @@ class FrontendFewShotManager:
 
 
 class FrontendAgentService:
-    """Autonomous Incident Precursor Reasoning Agent for Streamlit Frontend."""
+    """Unified reasoning service connecting Person 2's LLM engine to the frontend."""
 
     def __init__(self, storage: Optional[SafetyStorage] = None):
         self.storage = storage or SafetyStorage()
@@ -88,7 +123,166 @@ class FrontendAgentService:
         trace = AgentExecutionTrace(report_id=report_id or f"NM-LIVE-{int(time.time())}")
         report_id = trace.report_id
 
-        # STEP 1: Precursor Pattern Scan Tool
+        # Query recent overrides for dynamic few-shot injection
+        recent_overrides = self.few_shot_manager.get_latest_exemplars(max_examples=3)
+        for ov in recent_overrides:
+            trace.dynamic_few_shot_applied.append(
+                f"[{ov.report_id}] {ov.original_risk.value} -> {ov.overridden_risk.value} ('{ov.override_reason}')"
+            )
+
+        # Attempt Person 2's live LLM reasoning if valid API key is present
+        api_key = (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "").strip()
+        if api_key and len(api_key) > 10:
+            try:
+                enriched = self._run_person2_llm_agent(
+                    raw_text=raw_text,
+                    department=department,
+                    location=location,
+                    facility=facility,
+                    reporter_role=reporter_role,
+                    equipment=equipment,
+                    report_id=report_id,
+                    trace=trace,
+                )
+                if enriched:
+                    trace.final_enriched_report = enriched
+                    self.storage.save_enriched_report(enriched)
+                    return trace
+            except Exception as e:
+                trace.steps_executed.append(f"Notice: Person 2 live LLM encountered error ({e}). Using deterministic expert engine fallback.")
+
+        # Robust Deterministic Expert Heuristic Synthesis (Always runs successfully)
+        enriched = self._run_deterministic_agent(
+            raw_text=raw_text,
+            department=department,
+            location=location,
+            facility=facility,
+            reporter_role=reporter_role,
+            equipment=equipment,
+            report_id=report_id,
+            recent_overrides=recent_overrides,
+            trace=trace,
+        )
+        trace.final_enriched_report = enriched
+        self.storage.save_enriched_report(enriched)
+        return trace
+
+    def _run_person2_llm_agent(self, raw_text, department, location, facility, reporter_role, equipment, report_id, trace) -> Optional[EnrichedReport]:
+        """Runs Person 2's SafetyReportAgent directly."""
+        from person2_llm_agent.agent_orchestrator import SafetyReportAgent
+        from person2_llm_agent.few_shot_manager import FewShotManager
+
+        fsm = FewShotManager()
+        for ov in self.few_shot_manager.get_latest_exemplars(max_examples=5):
+            fsm.add_correction(
+                report=ov.report_id,
+                original_label=ov.original_risk.value,
+                corrected_label=ov.overridden_risk.value,
+                reason=ov.override_reason,
+            )
+
+        p2_agent = SafetyReportAgent(few_shot_manager=fsm)
+
+        # Step 1: Extraction
+        trace.steps_executed.append("1. Invoking Person 2 'extract_information' LLM prompt.")
+        t0 = time.time()
+        extracted = p2_agent.extract_information(raw_text)
+        trace.raw_extraction_data = extracted
+        trace.tool_calls.append(ToolExecutionRecord(
+            tool_name="extract_information",
+            input_args={"report_length": len(raw_text)},
+            output_result=extracted,
+            execution_time_ms=round((time.time() - t0) * 1000, 2),
+        ))
+
+        # Step 2: RAG Retrieval of human corrections
+        trace.steps_executed.append("2. Invoking Person 2 'RAGEngine.retrieve' for relevant historical corrections.")
+        t0 = time.time()
+        retrieved_corrections = p2_agent.rag_engine.retrieve(raw_text, top_k=3)
+        trace.tool_calls.append(ToolExecutionRecord(
+            tool_name="rag_engine.retrieve",
+            input_args={"query_preview": raw_text[:60]},
+            output_result={"matched_corrections": retrieved_corrections},
+            execution_time_ms=round((time.time() - t0) * 1000, 2),
+        ))
+
+        # Step 3: Classification
+        trace.steps_executed.append("3. Invoking Person 2 'classify_risk' LLM prompt with few-shot injection.")
+        t0 = time.time()
+        classification = p2_agent.classify_risk(raw_text, extracted)
+        trace.raw_classification_data = classification
+        trace.tool_calls.append(ToolExecutionRecord(
+            tool_name="classify_risk",
+            input_args={"extracted_keys": list(extracted.keys())},
+            output_result=classification,
+            execution_time_ms=round((time.time() - t0) * 1000, 2),
+        ))
+
+        trace.llm_provider_used = "Person 2 Gemini Agent (Live Cloud Inference)"
+
+        # Map to central schema
+        risk_map = {"LOW": RiskLevel.LOW, "MEDIUM": RiskLevel.MEDIUM, "HIGH": RiskLevel.HIGH}
+        risk_lvl = risk_map.get(str(classification.get("risk_level", "MEDIUM")).upper(), RiskLevel.MEDIUM)
+        confidence = float(classification.get("confidence", 0.90))
+        reason = str(classification.get("reason", "Evaluated by Person 2 LLM Agent."))
+        human_review = bool(classification.get("human_review_required", False))
+
+        hazards = extracted.get("hazards", [])
+        primary_hazard = hazards[0] if hazards else "Unspecified Workplace Hazard"
+        risk_factors = extracted.get("risk_factors", [])
+        missing_info = extracted.get("missing_information", [])
+        consequences = extracted.get("potential_consequences", [])
+
+        # Score mapping
+        score = 8.8 if risk_lvl == RiskLevel.HIGH else (5.8 if risk_lvl == RiskLevel.MEDIUM else 2.8)
+
+        # Citations
+        citations = ["OSHA General Industry 1910.147 (Energy Control)" if risk_lvl == RiskLevel.HIGH else "OSHA 1910.22 (General Safety)"]
+        trace.retrieved_citations = citations
+
+        raw_rep = NearMissReport(
+            id=report_id,
+            facility=facility,
+            department=department,
+            location_specific=location,
+            reporter_role=reporter_role,
+            raw_text=raw_text,
+            equipment_involved=equipment,
+            environmental_factors="Assessed by Person 2 Agent",
+            immediate_action_taken="Processed via LLM pipeline",
+        )
+
+        extraction_obj = StructuredExtraction(
+            report_id=report_id,
+            primary_hazard=primary_hazard,
+            hazard_category=HazardCategory.MECHANICAL_CRUSH if "press" in raw_text.lower() or "forklift" in raw_text.lower() else HazardCategory.SLIP_TRIP_FALL,
+            precursor_events=risk_factors or ["Unsafe condition flagged by model"],
+            affected_assets=["Operating Personnel", equipment],
+            failed_safeguards=consequences or ["Missing/bypassed controls"],
+            recommended_mitigation=f"Safety Review: {missing_info[0] if missing_info else 'Inspect zone controls.'}",
+        )
+
+        assessment_obj = RiskAssessment(
+            report_id=report_id,
+            risk_level=risk_lvl,
+            risk_score=score,
+            confidence=confidence,
+            rationale=reason + (f" [HUMAN REVIEW REQUIRED: Missing {len(missing_info)} item(s)]" if human_review else ""),
+            osha_citations=citations,
+            precursor_severity_signals=risk_factors,
+            escalation_potential=(risk_lvl == RiskLevel.HIGH or human_review),
+        )
+
+        return EnrichedReport(
+            report=raw_rep,
+            extraction=extraction_obj,
+            assessment=assessment_obj,
+            overrides=[],
+            effective_risk_level=risk_lvl,
+        )
+
+    def _run_deterministic_agent(self, raw_text, department, location, facility, reporter_role, equipment, report_id, recent_overrides, trace) -> EnrichedReport:
+        """Deterministic expert heuristic reasoning ensuring 100% functionality without API keys."""
         trace.steps_executed.append("1. Invoked 'detect_fatal_precursor_signals' tool to scan for SIF triggers.")
         t0 = time.time()
         precursor_result = self._tool_detect_precursors(raw_text)
@@ -99,7 +293,6 @@ class FrontendAgentService:
             execution_time_ms=round((time.time() - t0) * 1000, 2),
         ))
 
-        # STEP 2: Grounded Regulatory Retrieval Tool (RAG)
         trace.steps_executed.append("2. Invoked 'lookup_osha_standards' RAG tool for regulatory benchmarks.")
         t0 = time.time()
         rag_result = self._tool_lookup_osha(department, raw_text, precursor_result.get("precursor_tag", ""))
@@ -112,16 +305,11 @@ class FrontendAgentService:
         citations = [item["standard"] for item in rag_result.get("matched_standards", [])]
         trace.retrieved_citations = citations
 
-        # STEP 3: Hazard Severity Index Tool
         trace.steps_executed.append("3. Invoked 'calculate_hazard_severity_index' tool for mathematical scoring.")
         is_sif = precursor_result["sif_precursor_detected"]
         energy = "High" if is_sif else ("Low" if "slip" in raw_text.lower() and "stair" not in raw_text.lower() and "chemical" not in raw_text.lower() else "Medium")
-        if energy == "Low":
-            barrier = "Intact"
-            exposure = "Intermittent"
-        else:
-            barrier = "Defeated" if any(w in raw_text.lower() for w in ["bypass", "missing", "expired", "failed", "broken", "unsecured", "taped"]) else "Degraded"
-            exposure = "Continuous"
+        barrier = "Intact" if energy == "Low" else ("Defeated" if any(w in raw_text.lower() for w in ["bypass", "missing", "expired", "failed", "broken", "unsecured", "taped"]) else "Degraded")
+        exposure = "Intermittent" if energy == "Low" else "Continuous"
 
         t0 = time.time()
         severity_result = self._tool_calc_severity(energy, barrier, exposure, max(precursor_result["signal_count"], 1))
@@ -132,20 +320,10 @@ class FrontendAgentService:
             execution_time_ms=round((time.time() - t0) * 1000, 2),
         ))
 
-        # STEP 4: Dynamic Few-Shot Ingestion from Safety Officer Overrides
-        trace.steps_executed.append("4. Queried active human-in-the-loop overrides for dynamic few-shot calibration.")
-        recent_overrides = self.few_shot_manager.get_latest_exemplars(max_examples=3)
-        for ov in recent_overrides:
-            trace.dynamic_few_shot_applied.append(
-                f"[{ov.report_id}] {ov.original_risk.value} -> {ov.overridden_risk.value} ('{ov.override_reason}')"
-            )
-
-        # STEP 5: Synthesis
-        trace.steps_executed.append("5. Executed structured extraction and risk synthesis with few-shot calibration.")
+        trace.steps_executed.append("4. Evaluated dynamic few-shot human overrides.")
         tier = severity_result["recommended_risk_tier"]
         score = severity_result["hazard_severity_score"]
 
-        # Check if dynamic few-shot rules apply
         matched_override_reason = None
         for ov in recent_overrides:
             reason_words = [w.lower() for w in ov.override_reason.split() if len(w) > 4]
@@ -157,37 +335,46 @@ class FrontendAgentService:
 
         risk_level = RiskLevel(tier)
 
-        # Hazard Category
         cat = HazardCategory.SLIP_TRIP_FALL
         text_l = raw_text.lower()
-        if any(w in text_l for w in ["acid", "chemical", "fume", "toxic", "solvent"]):
-            cat = HazardCategory.CHEMICAL_TOXIC
-        elif any(w in text_l for w in ["forklift", "press", "ram", "pinch", "crush", "truck"]):
-            cat = HazardCategory.MECHANICAL_CRUSH
-        elif any(w in text_l for w in ["arc flash", "480v", "electric", "grounding", "voltage"]):
-            cat = HazardCategory.ELECTRICAL
-        elif any(w in text_l for w in ["catwalk", "mezzanine", "fall", "height", "dropped"]):
-            cat = HazardCategory.FALLING_OBJECTS_HEIGHT
-        elif any(w in text_l for w in ["fire", "ignite", "spark", "explosion", "toluene"]):
-            cat = HazardCategory.THERMAL_FIRE
-        elif any(w in text_l for w in ["confined space", "h2s", "oxygen", "tank"]):
-            cat = HazardCategory.ATMOSPHERIC_CONFINED
+        if any(w in text_l for w in ["acid", "chemical", "fume", "toxic", "solvent"]): cat = HazardCategory.CHEMICAL_TOXIC
+        elif any(w in text_l for w in ["forklift", "press", "ram", "pinch", "crush", "truck"]): cat = HazardCategory.MECHANICAL_CRUSH
+        elif any(w in text_l for w in ["arc flash", "480v", "electric", "grounding", "voltage"]): cat = HazardCategory.ELECTRICAL
+        elif any(w in text_l for w in ["catwalk", "mezzanine", "fall", "height", "dropped"]): cat = HazardCategory.FALLING_OBJECTS_HEIGHT
+        elif any(w in text_l for w in ["fire", "ignite", "spark", "explosion", "toluene"]): cat = HazardCategory.THERMAL_FIRE
+        elif any(w in text_l for w in ["confined space", "h2s", "oxygen", "tank"]): cat = HazardCategory.ATMOSPHERIC_CONFINED
 
         precursors = [s["precursor_domain"] for s in precursor_result.get("active_signals", [])]
-        if not precursors:
-            precursors = ["Unaddressed physical anomaly in operational work zone"]
+        if not precursors: precursors = ["Unaddressed physical anomaly in operational work zone"]
 
-        safeguards = []
-        if "shield" in text_l: safeguards.append("Flange / Protective Spray Shield")
-        if "interlock" in text_l or "light curtain" in text_l: safeguards.append("Point-of-operation Safety Interlock")
-        if "loto" in text_l or "bypass" in text_l: safeguards.append("Energy Isolation Lockout/Tagout")
-        if "ppe" in text_l or "glasses" in text_l or "gloves" in text_l: safeguards.append("Mandatory Personal Protective Equipment")
-        if not safeguards: safeguards.append("Secondary visual inspection check")
+        # Missing information heuristic
+        missing_info = []
+        if "ppe" not in text_l and "equipment" not in text_l: missing_info.append("PPE compliance status at time of observation")
+        if "witness" not in text_l: missing_info.append("Secondary witness confirmation")
+        if not missing_info: missing_info.append("Root cause preventive inspection date")
+
+        consequences = ["Possible laceration or strain" if tier == "Low" else ("Serious injury or equipment damage" if tier == "Medium" else "Catastrophic Serious Injury or Fatality (SIF)")]
+
+        trace.raw_extraction_data = {
+            "risk_factors": precursors,
+            "location": location,
+            "department": department,
+            "hazards": [f"{cat.value} - {precursor_result.get('precursor_tag', 'Operational Risk')}"],
+            "potential_consequences": consequences,
+            "missing_information": missing_info,
+        }
+
+        trace.raw_classification_data = {
+            "risk_level": tier.upper(),
+            "confidence": 0.94 if not matched_override_reason else 0.98,
+            "reason": f"Analyzed under '{cat.value}'. Regulatory benchmark: {citations[0] if citations else 'OSHA 1910.22'}.",
+            "human_review_required": len(missing_info) >= 2 or tier == "High",
+        }
 
         rationale = (
-            f"Precursor analysis flagged {len(precursors)} critical risk signal(s) under category '{cat.value}'. "
-            f"Evaluated against regulatory benchmark {citations[0] if citations else 'OSHA General Duty Clause'}. "
-            f"Safety severity index scored {score:.1f}/10 with barrier integrity assessed as {severity_result['barrier_status']}."
+            f"Precursor analysis flagged {len(precursors)} critical risk signal(s) under '{cat.value}'. "
+            f"Evaluated against benchmark {citations[0] if citations else 'OSHA General Duty Clause'}. "
+            f"Severity score: {score:.1f}/10 with barrier integrity assessed as {severity_result['barrier_status']}."
         )
         if matched_override_reason:
             rationale += f" [Dynamically Calibrated via Senior Officer Override: '{matched_override_reason}']"
@@ -200,21 +387,21 @@ class FrontendAgentService:
             reporter_role=reporter_role,
             raw_text=raw_text,
             equipment_involved=equipment,
-            environmental_factors="Assessed by Agent",
+            environmental_factors="Assessed by Expert Agent",
             immediate_action_taken="Ingested by Incident Precursor Agent",
         )
 
-        extraction = StructuredExtraction(
+        extraction_obj = StructuredExtraction(
             report_id=report_id,
             primary_hazard=f"{cat.value} Precursor - {precursor_result.get('precursor_tag', 'Operational Risk')}",
             hazard_category=cat,
             precursor_events=precursors,
             affected_assets=["Operational Personnel", equipment if equipment != "N/A" else "Workstation Area"],
-            failed_safeguards=safeguards,
-            recommended_mitigation=f"Audit barrier reliability according to {citations[0] if citations else 'OSHA guidelines'}; enforce preventive maintenance.",
+            failed_safeguards=consequences,
+            recommended_mitigation=f"Audit barrier reliability according to {citations[0] if citations else 'OSHA guidelines'}; verify: {missing_info[0]}.",
         )
 
-        assessment = RiskAssessment(
+        assessment_obj = RiskAssessment(
             report_id=report_id,
             risk_level=risk_level,
             risk_score=score,
@@ -225,17 +412,13 @@ class FrontendAgentService:
             escalation_potential=severity_result.get("escalation_potential", False),
         )
 
-        enriched = EnrichedReport(
+        return EnrichedReport(
             report=raw_rep,
-            extraction=extraction,
-            assessment=assessment,
+            extraction=extraction_obj,
+            assessment=assessment_obj,
             overrides=[],
             effective_risk_level=risk_level,
         )
-
-        trace.final_enriched_report = enriched
-        self.storage.save_enriched_report(enriched)
-        return trace
 
     def _tool_detect_precursors(self, text: str) -> Dict[str, Any]:
         text_l = text.lower()

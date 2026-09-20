@@ -1,16 +1,13 @@
-from prompts import (
-    build_extraction_prompt,
-    build_classification_prompt
-)
-
-from tools import (
-    extract_json,
-    validate_extraction,
-    validate_classification
-)
-
-from rag_engine import RAGEngine
-from llm_client import LLMClient
+try:
+    from .prompts import build_extraction_prompt, build_classification_prompt
+    from .tools import extract_json, validate_extraction, validate_classification
+    from .rag_engine import RAGEngine
+    from .llm_client import LLMClient
+except (ImportError, ValueError):
+    from prompts import build_extraction_prompt, build_classification_prompt
+    from tools import extract_json, validate_extraction, validate_classification
+    from rag_engine import RAGEngine
+    from llm_client import LLMClient
 
 
 class SafetyReportAgent:

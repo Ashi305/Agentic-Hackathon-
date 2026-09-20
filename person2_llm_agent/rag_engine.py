@@ -70,3 +70,6 @@ class RAGEngine:
                 results.append(example)
 
         return results
+
+
+SafetyRAGEngine = RAGEngine

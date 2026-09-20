@@ -20,7 +20,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
         <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">
             <b>Compulsory Add-On Requirement:</b> When an EHS safety officer overrides an automated risk score,
             the correction and its operational rationale are stored in SQLite and dynamically injected as few-shot
-            exemplars into subsequent agent reasoning cycles.
+            exemplars into subsequent agent reasoning cycles via Person 2's RAGEngine.
         </p>
         """,
         unsafe_allow_html=True,
@@ -178,9 +178,55 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
                     override_reason=rationale_text.strip(),
                     timestamp=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                 )
-                storage.log_override(override_rec)
-                st.success(f"Override committed for {selected_id}. Dynamic few-shot prompt memory updated.")
+                few_shot_manager.log_override(override_rec)
+                st.success(f"Override committed for {selected_id}. Dynamic few-shot prompt memory and Person 2 FewShotManager updated.")
                 st.rerun()
+
+    # -------------------------------------------------------------------------
+    # Person 2 RAGEngine Live Retrieval Simulation
+    # -------------------------------------------------------------------------
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="view-title" style="font-size: 1.15rem;">
+            RAG Precursor Correction Retrieval Simulator (Person 2 Engine)
+        </div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">
+            Test Person 2's <code>RAGEngine.retrieve()</code> directly: Type a report scenario below to see which past human corrections the RAG engine automatically retrieves.
+        </p>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    rag_test_query = st.text_input(
+        "Simulate New Near-Miss Observation Text:",
+        value="Worker slipped on wet chemical fluid near unshielded pipe flange.",
+    )
+
+    if rag_test_query:
+        try:
+            from person2_llm_agent.rag_engine import RAGEngine
+            if few_shot_manager.backend_fsm:
+                rag = RAGEngine(few_shot_manager.backend_fsm)
+                retrieved = rag.retrieve(rag_test_query, top_k=3)
+                if retrieved:
+                    st.markdown(f"<b>Retrieved {len(retrieved)} relevant human correction(s) based on lexical similarity:</b>", unsafe_allow_html=True)
+                    for item in retrieved:
+                        sim = item.get("similarity", 0.0)
+                        st.markdown(
+                            f"""
+                            <div style="background: #0b1120; border-left: 3px solid #38bdf8; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 0.85rem;">
+                                <div><b>Matched Report:</b> {item.get('report')} <span class="badge-pill neutral" style="margin-left: 8px;">Similarity: {sim}</span></div>
+                                <div style="color: #cbd5e1; margin-top: 4px;">Original: <code>{item.get('original_label')}</code> ➔ Corrected: <code style="color: #38bdf8;">{item.get('corrected_label')}</code></div>
+                                <div style="color: #f1f5f9; margin-top: 4px;"><i>"{item.get('reason')}"</i></div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                else:
+                    st.info("No corrections reached similarity threshold for this query.")
+        except Exception as e:
+            st.caption(f"RAG simulator status: {e}")
 
     # -------------------------------------------------------------------------
     # Active Dynamic Few-Shot Prompt Memory Inspector
