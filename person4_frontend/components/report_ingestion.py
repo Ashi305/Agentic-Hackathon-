@@ -11,6 +11,7 @@ import pandas as pd
 from typing import List, Dict, Any
 from person1_data_pipeline.schema import NearMissReport
 from person4_frontend.agent_service import FrontendAgentService
+from person4_frontend.components.ui_utils import render_html
 
 PRESET_SCENARIOS = {
     "Acid Flange Spray Shield Defect (High Risk Precursor)": {
@@ -91,14 +92,11 @@ def _get_csv_samples() -> Dict[str, Dict[str, str]]:
 
 def render_report_ingestion(agent: FrontendAgentService):
     """Renders the multi-modal report ingestion hub."""
-    st.markdown(
-        """
-        <div class="view-title">
-            Multi-Modal Safety Observation Ingestion
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    render_html("""
+    <div class="view-title">
+        Multi-Modal Safety Observation Ingestion
+    </div>
+    """)
 
     ingestion_mode = st.radio(
         "Select Ingestion Modality:",
@@ -115,14 +113,11 @@ def render_report_ingestion(agent: FrontendAgentService):
     # MODALITY 1: Structured Free-Text Narrative
     # -------------------------------------------------------------------------
     if ingestion_mode == "Structured Free-Text Narrative":
-        st.markdown(
-            """
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
-                Input free-text incident observations directly or select pre-calibrated operational test scenarios from Person 2's dataset.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        render_html("""
+        <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+            Input free-text incident observations directly or select pre-calibrated operational test scenarios from Person 2's dataset.
+        </div>
+        """)
 
         csv_samples = _get_csv_samples()
         all_options = ["Custom Narrative (Type Manually)"] + list(PRESET_SCENARIOS.keys()) + list(csv_samples.keys())
@@ -178,14 +173,11 @@ def render_report_ingestion(agent: FrontendAgentService):
     # MODALITY 2: Field Audio / Walkie-Talkie Simulation
     # -------------------------------------------------------------------------
     elif ingestion_mode == "Radio / Voice Transcript Simulator":
-        st.markdown(
-            """
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
-                Simulates real-world two-way radio communications and speech-to-text audio perception feeds.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        render_html("""
+        <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+            Simulates real-world two-way radio communications and speech-to-text audio perception feeds.
+        </div>
+        """)
 
         radio_choice = st.selectbox(
             "Select Field Radio Channel & Feed:",
@@ -193,29 +185,26 @@ def render_report_ingestion(agent: FrontendAgentService):
         )
         memo = RADIO_VOICE_MEMOS[radio_choice]
 
-        st.markdown(
-            f"""
-            <div class="audio-deck">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; font-family: 'JetBrains Mono';">
-                        [LIVE RECEPTION: {memo['channel']}]
-                    </span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 4px; height: 26px;">
-                    <span class="waveform-bar" style="animation-delay: 0.1s; height: 18px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.4s; height: 26px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.2s; height: 12px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.5s; height: 22px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.3s; height: 15px;"></span>
-                    <span class="waveform-bar" style="animation-delay: 0.6s; height: 26px;"></span>
-                </div>
-                <div style="margin-left: auto; font-size: 0.82rem; color: #cbd5e1;">
-                    Speaker: <b>{memo['speaker']}</b> | Codec: <code>Opus/16kHz</code>
-                </div>
+        render_html(f"""
+        <div class="audio-deck">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; font-family: 'JetBrains Mono';">
+                    [LIVE RECEPTION: {memo['channel']}]
+                </span>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            <div style="display: flex; align-items: center; gap: 4px; height: 26px;">
+                <span class="waveform-bar" style="animation-delay: 0.1s; height: 18px;"></span>
+                <span class="waveform-bar" style="animation-delay: 0.4s; height: 26px;"></span>
+                <span class="waveform-bar" style="animation-delay: 0.2s; height: 12px;"></span>
+                <span class="waveform-bar" style="animation-delay: 0.5s; height: 22px;"></span>
+                <span class="waveform-bar" style="animation-delay: 0.3s; height: 15px;"></span>
+                <span class="waveform-bar" style="animation-delay: 0.6s; height: 26px;"></span>
+            </div>
+            <div style="margin-left: auto; font-size: 0.82rem; color: #cbd5e1;">
+                Speaker: <b>{memo['speaker']}</b> | Codec: <code>Opus/16kHz</code>
+            </div>
+        </div>
+        """)
 
         st.markdown("**Perceived Audio Speech-to-Text Transcript:**")
         st.info(f"\"{memo['raw_audio_transcript']}\"")
@@ -239,15 +228,12 @@ def render_report_ingestion(agent: FrontendAgentService):
     # MODALITY 3: PDF Incident Report Ingestion (Person 1 Parser Component)
     # -------------------------------------------------------------------------
     elif ingestion_mode == "PDF Incident Report Ingestion (Person 1 Parser)":
-        st.markdown(
-            """
-            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
-                Direct integration with Person 1's automated PDF Document Ingestion Engine (<code style="color: #38bdf8;">person1_data_pipeline/parser.py</code>).
-                Extracts unstructured narrative text via PyPDF2 / pypdf, parses operational entities, and feeds them directly into the Precursor Reasoning Agent.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        render_html("""
+        <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+            Direct integration with Person 1's automated PDF Document Ingestion Engine (<code style="color: #38bdf8;">person1_data_pipeline/parser.py</code>).
+            Extracts unstructured narrative text via PyPDF2 / pypdf, parses operational entities, and feeds them directly into the Precursor Reasoning Agent.
+        </div>
+        """)
 
         source_tab = st.radio(
             "Select PDF Input Source:",
@@ -278,7 +264,7 @@ def render_report_ingestion(agent: FrontendAgentService):
                 with col_btn:
                     parse_now = st.button("Extract & Parse PDF Document", use_container_width=True)
                 with col_info:
-                    st.caption(f"Source File: <code>{selected_sample}</code>")
+                    render_html(f"<div style='font-size: 0.82rem; color: #94a3b8; padding-top: 8px;'>Source File: <code>{selected_sample}</code></div>")
 
                 if parse_now or ("active_pdf_data" in st.session_state and st.session_state.get("active_pdf_name") == selected_sample):
                     with st.spinner("Invoking Person 1 extract_text_from_pdf & parse_incident_text..."):
@@ -300,29 +286,26 @@ def render_report_ingestion(agent: FrontendAgentService):
             meta = st.session_state["active_pdf_data"]
             pdf_raw_text = meta.get("raw_description", "")
 
-            st.markdown(
-                f"""
-                <div class="glass-panel" style="margin-top: 14px; border-left: 4px solid #38bdf8;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <div>
-                            <span style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">
-                                Document: {meta.get('source_file', 'Report.pdf')}
-                            </span>
-                            <div style="font-size: 0.80rem; color: #94a3b8; margin-top: 2px;">
-                                Engine: <b>Person 1 PyPDF2 Parser</b> | Characters Extracted: <b>{len(pdf_raw_text)}</b> | Status: <b style="color: #34d399;">Parsed Successfully</b>
-                            </div>
-                        </div>
-                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
-                            Parser Ready
+            render_html(f"""
+            <div class="glass-panel" style="margin-top: 14px; border-left: 4px solid #38bdf8;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div>
+                        <span style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">
+                            Document: {meta.get('source_file', 'Report.pdf')}
                         </span>
+                        <div style="font-size: 0.80rem; color: #94a3b8; margin-top: 2px;">
+                            Engine: <b>Person 1 PyPDF2 Parser</b> | Characters Extracted: <b>{len(pdf_raw_text)}</b> | Status: <b style="color: #34d399;">Parsed Successfully</b>
+                        </div>
                     </div>
+                    <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
+                        Parser Ready
+                    </span>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            </div>
+            """)
 
             with st.form("pdf_inspection_form"):
-                st.markdown("<b style='color: #38bdf8;'>Extracted Safety Precursor Metadata:</b>", unsafe_allow_html=True)
+                render_html("<div style='font-weight: 700; color: #38bdf8; margin-bottom: 6px;'>Extracted Safety Precursor Metadata:</div>")
                 col_p1, col_p2, col_p3 = st.columns(3)
                 with col_p1:
                     pdf_dept = st.text_input("Extracted Department", value=meta.get("department", "General Operations"))
@@ -347,15 +330,12 @@ def render_report_ingestion(agent: FrontendAgentService):
 
         # Batch Directory Processing Expander (Person 1 Feature)
         with st.expander("Batch Directory Ingestion: Parse All PDFs in Archive"):
-            st.markdown(
-                """
-                <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 8px;">
-                    Executes <code>process_pdf_directory()</code> from Person 1's backend module across the <code>person1_data_pipeline/data/pdf_reports/</code> folder.
-                    All scanned PDF records are automatically structured and saved into the SQLite warehouse.
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            render_html("""
+            <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 8px;">
+                Executes <code>process_pdf_directory()</code> from Person 1's backend module across the <code>person1_data_pipeline/data/pdf_reports/</code> folder.
+                All scanned PDF records are automatically structured and saved into the SQLite warehouse.
+            </div>
+            """)
             if st.button("Run Person 1 Batch PDF Pipeline", use_container_width=True):
                 with st.spinner("Iterating through PDF directory, extracting documents, and storing in warehouse..."):
                     count = agent.batch_process_pdf_directory()
@@ -459,90 +439,81 @@ def render_report_ingestion(agent: FrontendAgentService):
         confidence = float(raw_cls.get("confidence", ass.confidence))
         human_review_req = bool(raw_cls.get("human_review_required", ass.escalation_potential))
 
-        st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
-        st.markdown(
-            """
-            <div class="view-title">
-                Agent Precursor Extraction & Risk Classification
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        render_html("<div style='height: 20px;'></div>")
+        render_html("""
+        <div class="view-title">
+            Agent Precursor Extraction & Risk Classification
+        </div>
+        """)
 
         # Human Review Alert if required by Person 2's model
         if human_review_req:
-            st.markdown(
-                """
-                <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.5); padding: 12px 16px; border-radius: 8px; margin-bottom: 14px;">
-                    <b style="color: #fde68a;">[HUMAN REVIEW REQUIRED]</b>
-                    <span style="color: #f1f5f9; font-size: 0.88rem; margin-left: 8px;">
-                        Model flagged uncertainty (Confidence below 0.60 or critical precursor combination). A safety officer should verify on the Overrides tab.
-                    </span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            render_html("""
+            <div style="background: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.5); padding: 12px 16px; border-radius: 8px; margin-bottom: 14px;">
+                <b style="color: #fde68a;">[HUMAN REVIEW REQUIRED]</b>
+                <span style="color: #f1f5f9; font-size: 0.88rem; margin-left: 8px;">
+                    Model flagged uncertainty (Confidence below 0.60 or critical precursor combination). A safety officer should verify on the Overrides tab.
+                </span>
+            </div>
+            """)
 
         risk_class = ass.risk_level.value.lower()
-        st.markdown(
-            f"""
-            <div class="glass-panel" style="border-left: 4px solid var(--tier-{ 'high' if risk_class == 'high' else ('medium' if risk_class == 'medium' else 'low') });">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                    <div>
-                        <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{hazards[0] if hazards else ext.primary_hazard}</span>
-                        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
-                            Report ID: <code>{rep.report.id}</code> | Category: <b>{ext.hazard_category.value}</b>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <span class="badge-pill {risk_class}">{ass.risk_level.value} Risk</span>
-                        <span class="badge-pill neutral">
-                            Confidence: {int(confidence * 100)}%
-                        </span>
-                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
-                            Severity: {ass.risk_score}/10
-                        </span>
+        render_html(f"""
+        <div class="glass-panel" style="border-left: 4px solid var(--tier-{ 'high' if risk_class == 'high' else ('medium' if risk_class == 'medium' else 'low') });">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div>
+                    <span style="font-size: 1.25rem; font-weight: 800; color: #ffffff;">{hazards[0] if hazards else ext.primary_hazard}</span>
+                    <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
+                        Report ID: <code>{rep.report.id}</code> | Category: <b>{ext.hazard_category.value}</b>
                     </div>
                 </div>
-                
-                <div style="background: #0b1120; padding: 14px 18px; border-radius: 8px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5; color: #f1f5f9;">
-                    <b style="color: #38bdf8;">Agent Reasoning Rationale:</b> {raw_cls.get("reason", ass.rationale)}
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
-                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
-                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            Extracted Risk Factors
-                        </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
-                            {''.join([f'<li>{p}</li>' for p in risk_factors])}
-                        </ul>
-                    </div>
-                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
-                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            Potential Consequences
-                        </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
-                            {''.join([f'<li>{s}</li>' for s in consequences])}
-                        </ul>
-                    </div>
-                    <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
-                        <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
-                            Missing Information in Report
-                        </div>
-                        <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #fcd34d;">
-                            {''.join([f'<li>{m}</li>' for m in missing_info]) if missing_info else '<li>All essential fields identified.</li>'}
-                        </ul>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 14px; font-size: 0.88rem; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
-                    <b>Actionable Mitigation:</b> {ext.recommended_mitigation}
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="badge-pill {risk_class}">{ass.risk_level.value} Risk</span>
+                    <span class="badge-pill neutral">
+                        Confidence: {int(confidence * 100)}%
+                    </span>
+                    <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
+                        Severity: {ass.risk_score}/10
+                    </span>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+            
+            <div style="background: #0b1120; padding: 14px 18px; border-radius: 8px; margin-bottom: 16px; border-left: 3px solid #38bdf8; font-size: 0.90rem; line-height: 1.5; color: #f1f5f9;">
+                <b style="color: #38bdf8;">Agent Reasoning Rationale:</b> {raw_cls.get("reason", ass.rationale)}
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+                <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                        Extracted Risk Factors
+                    </div>
+                    <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
+                        {''.join([f'<li>{p}</li>' for p in risk_factors])}
+                    </ul>
+                </div>
+                <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                        Potential Consequences
+                    </div>
+                    <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #f8fafc;">
+                        {''.join([f'<li>{s}</li>' for s in consequences])}
+                    </ul>
+                </div>
+                <div style="background: #0d1527; padding: 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size: 0.76rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">
+                        Missing Information in Report
+                    </div>
+                    <ul style="margin: 8px 0 0 0; padding-left: 18px; font-size: 0.88rem; color: #fcd34d;">
+                        {''.join([f'<li>{m}</li>' for m in missing_info]) if missing_info else '<li>All essential fields identified.</li>'}
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 14px; font-size: 0.88rem; color: #34d399; background: rgba(16, 185, 129, 0.12); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                <b>Actionable Mitigation:</b> {ext.recommended_mitigation}
+            </div>
+        </div>
+        """)
 
 
 def _execute_agent_analysis(agent, text, dept, loc, equipment):
