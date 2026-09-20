@@ -268,6 +268,92 @@ def render_dashboard_view(df: pd.DataFrame):
             )
             st.plotly_chart(fig_precursors, width="stretch")
 
+    # 4.5 Time Series Analytics
+    st.markdown(
+        """
+        <div class="view-title" style="margin-top: 14px;">
+            Temporal Risk & Precursor Detection Trends
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    
+    timeline_df = SafetyAggregator.get_incident_timeline(filtered_df)
+    rolling_df = SafetyAggregator.get_rolling_severity_index(filtered_df)
+    
+    if not timeline_df.empty:
+        # Filter for the last 30 days
+        timeline_df["date_dt"] = pd.to_datetime(timeline_df["date"])
+        latest_date = timeline_df["date_dt"].max()
+        cutoff_date = (latest_date - pd.Timedelta(days=30)).date()
+        
+        recent_timeline = timeline_df[timeline_df["date"] >= cutoff_date]
+        recent_rolling = rolling_df[rolling_df["date"] >= cutoff_date] if not rolling_df.empty else rolling_df
+
+        col_ts1, col_ts2 = st.columns([5, 5])
+        with col_ts1:
+            fig_timeline = px.bar(
+                recent_timeline, 
+                x="date", 
+                y=["High", "Medium", "Low"],
+                color_discrete_map={"High": "#f43f5e", "Medium": "#fbbf24", "Low": "#10b981"},
+                title="Recent Precursor Volume (Last 30 Days)",
+                labels={"value": "Incident Count", "date": "Timeline", "variable": "Risk Level"}
+            )
+            fig_timeline.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+                xaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                yaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                margin=dict(t=30, b=10, l=10, r=10),
+                legend_title_text="",
+                barmode="stack"
+            )
+            st.plotly_chart(fig_timeline, width="stretch")
+            
+        with col_ts2:
+            fig_rolling = px.line(
+                recent_rolling,
+                x="date",
+                y=["daily_avg_score", "rolling_avg_score"],
+                color_discrete_map={"daily_avg_score": "#94a3b8", "rolling_avg_score": "#38bdf8"},
+                title="Recent Severity Trend (Last 30 Days)",
+                labels={"value": "Severity Score (0-10)", "date": "Timeline", "variable": "Metric"}
+            )
+            fig_rolling.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+                xaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                yaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                margin=dict(t=30, b=10, l=10, r=10),
+                legend_title_text=""
+            )
+            fig_rolling.update_traces(patch={"line": {"dash": "dot"}}, selector={"name": "daily_avg_score"})
+            st.plotly_chart(fig_rolling, width="stretch")
+
+        # Third chart: Cumulative risk trend over the entire time
+        cumulative_df = SafetyAggregator.get_cumulative_risk_trend(filtered_df)
+        if not cumulative_df.empty:
+            fig_cumulative = px.area(
+                cumulative_df,
+                x="date",
+                y="cumulative_avg_score",
+                title="Overall Cumulative Risk Trend (All Time)",
+                color_discrete_sequence=["#8b5cf6"],
+                labels={"cumulative_avg_score": "Cumulative Avg Score", "date": "Timeline"}
+            )
+            fig_cumulative.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#f8fafc", family="Plus Jakarta Sans"),
+                xaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                yaxis=dict(color="#cbd5e1", gridcolor="rgba(255,255,255,0.06)"),
+                margin=dict(t=30, b=10, l=10, r=10),
+            )
+            st.plotly_chart(fig_cumulative, width="stretch")
+
     # 5. Cross-Report Systemic Precursor Themes
     st.markdown(
         """

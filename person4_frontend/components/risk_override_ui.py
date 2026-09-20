@@ -17,7 +17,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
 '<p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">'
 '<b>Compulsory Add-On Requirement:</b> When an EHS safety officer overrides an automated risk score, '
 'the correction and its operational rationale are stored in SQLite and dynamically injected as few-shot '
-"exemplars into subsequent agent reasoning cycles via Person 2's RAGEngine.</p>",
+"exemplars into subsequent agent reasoning cycles via RAGEngine.</p>",
         unsafe_allow_html=True,
     )
 
@@ -148,7 +148,7 @@ f'<span class="badge-pill {new_risk_tier.lower()}">{new_risk_tier}</span></span>
                     timestamp=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                 )
                 few_shot_manager.log_override(override_rec)
-                st.success(f"Override committed for {selected_id}. Dynamic few-shot prompt memory and Person 2 FewShotManager updated.")
+                st.success(f"Override committed for {selected_id}. Dynamic few-shot prompt memory and FewShotManager updated.")
                 st.rerun()
 
     # -------------------------------------------------------------------------
@@ -157,9 +157,9 @@ f'<span class="badge-pill {new_risk_tier.lower()}">{new_risk_tier}</span></span>
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     st.markdown(
 '<div class="view-title" style="font-size: 1.15rem;">'
-'RAG Precursor Correction Retrieval Simulator (Person 2 Engine)</div>'
+'RAG Precursor Correction Retrieval Simulator </div>'
 '<p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">'
-"Test Person 2's <code>RAGEngine.retrieve()</code> directly: Type a report scenario below "
+"Test <code>RAGEngine.retrieve()</code> directly: Type a report scenario below "
 'to see which past human corrections the RAG engine automatically retrieves.</p>',
         unsafe_allow_html=True,
     )
