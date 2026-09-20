@@ -167,7 +167,7 @@ def render_dashboard_view(df: pd.DataFrame):
             font=dict(color="#f8fafc", family="Plus Jakarta Sans", size=12),
             margin=dict(t=10, b=10, l=10, r=10),
         )
-        st.plotly_chart(fig_hierarchy, use_container_width=True)
+        st.plotly_chart(fig_hierarchy, width="stretch")
 
     with col_chart2:
         st.markdown(
@@ -201,7 +201,7 @@ def render_dashboard_view(df: pd.DataFrame):
             showlegend=False,
             annotations=[dict(text=f"<b>{kpis['total_reports']}</b><br><span style='font-size:12px;color:#cbd5e1;'>REPORTS</span>", x=0.5, y=0.5, font_size=20, font_color="#ffffff", showarrow=False)]
         )
-        st.plotly_chart(fig_donut, use_container_width=True)
+        st.plotly_chart(fig_donut, width="stretch")
 
     # 4. Interactive Plotly Charts Row 2
     col_chart3, col_chart4 = st.columns([5, 5])
@@ -235,7 +235,7 @@ def render_dashboard_view(df: pd.DataFrame):
                 margin=dict(t=10, b=10, l=10, r=10),
                 coloraxis_colorbar=dict(title=dict(text="High Risk", font=dict(color="#f8fafc")), tickfont=dict(color="#cbd5e1"), thickness=12, len=0.7),
             )
-            st.plotly_chart(fig_hotspot, use_container_width=True)
+            st.plotly_chart(fig_hotspot, width="stretch")
 
     with col_chart4:
         st.markdown(
@@ -266,7 +266,7 @@ def render_dashboard_view(df: pd.DataFrame):
                 margin=dict(t=10, b=10, l=10, r=10),
                 coloraxis_showscale=False,
             )
-            st.plotly_chart(fig_precursors, use_container_width=True)
+            st.plotly_chart(fig_precursors, width="stretch")
 
     # 5. Cross-Report Systemic Precursor Themes
     st.markdown(
@@ -285,6 +285,7 @@ def render_dashboard_view(df: pd.DataFrame):
             "High Risk Incidents": c["high_risk_count"],
             "Avg Severity (0-10)": c["avg_risk_score"],
             "Affected Operating Sectors": ", ".join(c["affected_departments"]),
-            "Precursor Significance": c["precursor_significance"]
+            "Precursor Significance": c["precursor_significance"],
+            "Top Mitigations": " | ".join(c.get("db_mitigations", [])) if c.get("db_mitigations") else "Pending Review"
         })
-    st.dataframe(pd.DataFrame(cluster_records), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(cluster_records), width="stretch", hide_index=True)

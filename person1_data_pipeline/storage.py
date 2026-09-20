@@ -308,6 +308,7 @@ class SafetyStorage:
                 "equipment_involved": r.equipment_involved,
                 "primary_hazard": e.primary_hazard,
                 "hazard_category": e.hazard_category.value,
+                "recommended_mitigation": e.recommended_mitigation,
                 "precursor_events": e.precursor_events,
                 "precursor_count": len(e.precursor_events),
                 "failed_safeguards": e.failed_safeguards,

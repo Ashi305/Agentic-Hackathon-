@@ -136,7 +136,7 @@ def main():
             """,
             unsafe_allow_html=True,
         )
-        if st.button("Reload Warehouse Benchmark (42 Reports)", use_container_width=True):
+        if st.button("Reload Warehouse Benchmark (42 Reports)", width="stretch"):
             storage.seed_initial_data(target_count=42, force_reload=True)
             st.success("Warehouse refreshed!")
             st.rerun()

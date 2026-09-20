@@ -161,7 +161,7 @@ def render_report_ingestion(agent: FrontendAgentService):
                 placeholder="Describe unsafe conditions, precursor events, actions taken, and potential escalation risks...",
             )
 
-            submit_btn = st.form_submit_button("Run Agent Reasoner & Ingest", use_container_width=True)
+            submit_btn = st.form_submit_button("Run Agent Reasoner & Ingest", width="stretch")
 
         if submit_btn:
             if not text_val.strip():
@@ -221,7 +221,7 @@ def render_report_ingestion(agent: FrontendAgentService):
         with col_v2:
             voice_loc = st.text_input("Operational Area", value="Radio Sector Broadcast Zone")
 
-        if st.button("Process Radio Transmission Through Agent", use_container_width=True):
+        if st.button("Process Radio Transmission Through Agent", width="stretch"):
             _execute_agent_analysis(
                 agent,
                 f"[RADIO DISPATCH TRANSCRIPT]: {memo['raw_audio_transcript']}",
@@ -285,7 +285,7 @@ def render_report_ingestion(agent: FrontendAgentService):
             st.success(f"Successfully staged {len(staged)} report(s) for batch processing.")
             st.json(staged[:2])
 
-            if st.button("Ingest & Analyze Batch Reports", use_container_width=True):
+            if st.button("Ingest & Analyze Batch Reports", width="stretch"):
                 progress_bar = st.progress(0.0)
                 status_text = st.empty()
 

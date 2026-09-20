@@ -153,5 +153,5 @@ def render_agent_investigation_ui():
         data=trace.model_dump_json(indent=2),
         file_name=f"agent_trace_{trace.report_id}.json",
         mime="application/json",
-        use_container_width=True,
+        width="stretch",
     )

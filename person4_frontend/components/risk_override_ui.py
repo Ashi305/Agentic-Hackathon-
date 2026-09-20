@@ -13,16 +13,11 @@ from person4_frontend.agent_service import FrontendFewShotManager
 def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFewShotManager):
     """Renders the human-in-the-loop override console and dynamic prompt inspector."""
     st.markdown(
-        """
-        <div class="view-title">
-            Safety Officer Override Hub & Active Few-Shot Memory
-        </div>
-        <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">
-            <b>Compulsory Add-On Requirement:</b> When an EHS safety officer overrides an automated risk score,
-            the correction and its operational rationale are stored in SQLite and dynamically injected as few-shot
-            exemplars into subsequent agent reasoning cycles via Person 2's RAGEngine.
-        </p>
-        """,
+'<div class="view-title">Safety Officer Override Hub & Active Few-Shot Memory</div>'
+'<p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 16px;">'
+'<b>Compulsory Add-On Requirement:</b> When an EHS safety officer overrides an automated risk score, '
+'the correction and its operational rationale are stored in SQLite and dynamically injected as few-shot '
+"exemplars into subsequent agent reasoning cycles via Person 2's RAGEngine.</p>",
         unsafe_allow_html=True,
     )
 
@@ -76,60 +71,39 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
 
     with col_left:
         st.markdown(
-            """
-            <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
-                Current Automated Assessment
-            </div>
-            """,
+'<div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">'
+'Current Automated Assessment</div>',
             unsafe_allow_html=True,
         )
         orig_class = a.risk_level.value.lower()
         eff_class = effective_risk.value.lower()
+        override_badge = '<span class="badge-pill override">Previously Overridden</span>' if has_prior_override else ''
 
         st.markdown(
-            f"""
-            <div class="glass-panel" style="min-height: 380px;">
-                <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 4px;">
-                    Facility: <b>{r.facility}</b> | Department: <b>{r.department}</b>
-                </div>
-                <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px;">
-                    Zone: <code>{r.location_specific}</code> | Asset: <code>{r.equipment_involved}</code>
-                </div>
-                <div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
-                    {e.primary_hazard}
-                </div>
-                
-                <div style="background: #0b1120; padding: 12px; border-radius: 8px; font-size: 0.86rem; color: #f1f5f9; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); max-height: 110px; overflow-y: auto;">
-                    <b>Narrative:</b> <i>"{r.raw_text}"</i>
-                </div>
-                
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
-                    <div>
-                        <span style="font-size: 0.80rem; color: #94a3b8;">Original Model:</span>
-                        <span class="badge-pill {orig_class}">{a.risk_level.value}</span>
-                    </div>
-                    <div>
-                        <span style="font-size: 0.80rem; color: #94a3b8;">Effective:</span>
-                        <span class="badge-pill {eff_class}">{effective_risk.value}</span>
-                    </div>
-                    {f'<span class="badge-pill override">Previously Overridden</span>' if has_prior_override else ''}
-                </div>
-                
-                <div style="font-size: 0.83rem; color: #cbd5e1; line-height: 1.5;">
-                    <b>Model Rationale:</b> {a.rationale}
-                </div>
-            </div>
-            """,
+f'<div class="glass-panel" style="min-height: 380px;">'
+f'<div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 4px;">'
+f'Facility: <b>{r.facility}</b> | Department: <b>{r.department}</b></div>'
+f'<div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 12px;">'
+f'Zone: <code>{r.location_specific}</code> | Asset: <code>{r.equipment_involved}</code></div>'
+f'<div style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">'
+f'{e.primary_hazard}</div>'
+f'<div style="background: #0b1120; padding: 12px; border-radius: 8px; font-size: 0.86rem; color: #f1f5f9; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.08); max-height: 110px; overflow-y: auto;">'
+f'<b>Narrative:</b> <i>"{r.raw_text}"</i></div>'
+f'<div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">'
+f'<div><span style="font-size: 0.80rem; color: #94a3b8;">Original Model:</span>'
+f' <span class="badge-pill {orig_class}">{a.risk_level.value}</span></div>'
+f'<div><span style="font-size: 0.80rem; color: #94a3b8;">Effective:</span>'
+f' <span class="badge-pill {eff_class}">{effective_risk.value}</span></div>'
+f'{override_badge}</div>'
+f'<div style="font-size: 0.83rem; color: #cbd5e1; line-height: 1.5;">'
+f'<b>Model Rationale:</b> {a.rationale}</div></div>',
             unsafe_allow_html=True,
         )
 
     with col_right:
         st.markdown(
-            """
-            <div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
-                Safety Officer Calibration Console
-            </div>
-            """,
+'<div style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">'
+'Safety Officer Calibration Console</div>',
             unsafe_allow_html=True,
         )
         with st.form("officer_override_form"):
@@ -142,16 +116,11 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
                 new_risk_tier = st.selectbox("Calibrated Risk Tier:", risk_tiers, index=curr_idx)
 
             st.markdown(
-                f"""
-                <div style="background: #0b1120; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 0.82rem; color: #94a3b8;">Calibration Delta:</span>
-                    <span>
-                        <span class="badge-pill {effective_risk.value.lower()}">{effective_risk.value}</span>
-                        <span style="margin: 0 8px; color: #94a3b8;">➔</span>
-                        <span class="badge-pill {new_risk_tier.lower()}">{new_risk_tier}</span>
-                    </span>
-                </div>
-                """,
+f'<div style="background: #0b1120; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; margin: 8px 0; display: flex; align-items: center; justify-content: space-between;">'
+f'<span style="font-size: 0.82rem; color: #94a3b8;">Calibration Delta:</span>'
+f'<span><span class="badge-pill {effective_risk.value.lower()}">{effective_risk.value}</span>'
+f'<span style="margin: 0 8px; color: #94a3b8;">➔</span>'
+f'<span class="badge-pill {new_risk_tier.lower()}">{new_risk_tier}</span></span></div>',
                 unsafe_allow_html=True,
             )
 
@@ -164,7 +133,7 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
             char_count = len(rationale_text.strip())
             st.caption(f"Justification Length: {char_count} characters (Minimum 8 required)")
 
-            commit_btn = st.form_submit_button("Commit Override & Update Few-Shot Memory", use_container_width=True)
+            commit_btn = st.form_submit_button("Commit Override & Update Few-Shot Memory", width="stretch")
 
         if commit_btn:
             if char_count < 8:
@@ -187,14 +156,11 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
     # -------------------------------------------------------------------------
     st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
     st.markdown(
-        """
-        <div class="view-title" style="font-size: 1.15rem;">
-            RAG Precursor Correction Retrieval Simulator (Person 2 Engine)
-        </div>
-        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">
-            Test Person 2's <code>RAGEngine.retrieve()</code> directly: Type a report scenario below to see which past human corrections the RAG engine automatically retrieves.
-        </p>
-        """,
+'<div class="view-title" style="font-size: 1.15rem;">'
+'RAG Precursor Correction Retrieval Simulator (Person 2 Engine)</div>'
+'<p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">'
+"Test Person 2's <code>RAGEngine.retrieve()</code> directly: Type a report scenario below "
+'to see which past human corrections the RAG engine automatically retrieves.</p>',
         unsafe_allow_html=True,
     )
 
@@ -214,13 +180,10 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
                     for item in retrieved:
                         sim = item.get("similarity", 0.0)
                         st.markdown(
-                            f"""
-                            <div style="background: #0b1120; border-left: 3px solid #38bdf8; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 0.85rem;">
-                                <div><b>Matched Report:</b> {item.get('report')} <span class="badge-pill neutral" style="margin-left: 8px;">Similarity: {sim}</span></div>
-                                <div style="color: #cbd5e1; margin-top: 4px;">Original: <code>{item.get('original_label')}</code> ➔ Corrected: <code style="color: #38bdf8;">{item.get('corrected_label')}</code></div>
-                                <div style="color: #f1f5f9; margin-top: 4px;"><i>"{item.get('reason')}"</i></div>
-                            </div>
-                            """,
+f'<div style="background: #0b1120; border-left: 3px solid #38bdf8; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 0.85rem;">'
+f'<div><b>Matched Report:</b> {item.get("report")} <span class="badge-pill neutral" style="margin-left: 8px;">Similarity: {sim}</span></div>'
+f'<div style="color: #cbd5e1; margin-top: 4px;">Original: <code>{item.get("original_label")}</code> ➔ Corrected: <code style="color: #38bdf8;">{item.get("corrected_label")}</code></div>'
+f'<div style="color: #f1f5f9; margin-top: 4px;"><i>"{item.get("reason")}"</i></div></div>',
                             unsafe_allow_html=True,
                         )
                 else:
@@ -233,15 +196,10 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
     # -------------------------------------------------------------------------
     st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
     st.markdown(
-        """
-        <div class="view-title">
-            Active Dynamic Few-Shot Prompt Memory (Live View)
-        </div>
-        <p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">
-            The agent continuously queries the latest human corrections from SQLite and constructs the following
-            exemplars into its prompt context to dynamically self-align with senior safety officer decisions.
-        </p>
-        """,
+'<div class="view-title">Active Dynamic Few-Shot Prompt Memory (Live View)</div>'
+'<p style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 12px;">'
+'The agent continuously queries the latest human corrections from SQLite and constructs the following '
+'exemplars into its prompt context to dynamically self-align with senior safety officer decisions.</p>',
         unsafe_allow_html=True,
     )
 
@@ -253,29 +211,19 @@ def render_risk_override_ui(storage: SafetyStorage, few_shot_manager: FrontendFe
         for idx, ov in enumerate(recent_overrides, start=1):
             direction_color = "#f43f5e" if ov.overridden_risk.value == "High" else ("#fbbf24" if ov.overridden_risk.value == "Medium" else "#10b981")
             st.markdown(
-                f"""
-                <div class="glass-panel" style="border-left: 4px solid {direction_color}; padding: 16px 20px; margin-bottom: 12px; background: #0d1527;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-weight: 800; color: #ffffff; font-size: 0.95rem;">
-                            Pedagogical Exemplar #{idx} — Report Reference: <code>{ov.report_id}</code>
-                        </span>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <span class="badge-pill {ov.original_risk.value.lower()}">{ov.original_risk.value}</span>
-                            <span style="color: #94a3b8;">➔</span>
-                            <span class="badge-pill {ov.overridden_risk.value.lower()}">{ov.overridden_risk.value}</span>
-                        </div>
-                    </div>
-                    
-                    <div style="font-size: 0.90rem; color: #f1f5f9; margin: 8px 0;">
-                        <b>Officer Guiding Rationale:</b> <i>"{ov.override_reason}"</i>
-                    </div>
-                    
-                    <div style="font-size: 0.78rem; color: #94a3b8; display: flex; justify-content: space-between;">
-                        <span>Verified by: <code>{ov.safety_officer_id}</code></span>
-                        <span>Logged: {ov.timestamp} UTC</span>
-                    </div>
-                </div>
-                """,
+f'<div class="glass-panel" style="border-left: 4px solid {direction_color}; padding: 16px 20px; margin-bottom: 12px; background: #0d1527;">'
+f'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">'
+f'<span style="font-weight: 800; color: #ffffff; font-size: 0.95rem;">'
+f'Pedagogical Exemplar #{idx} — Report Reference: <code>{ov.report_id}</code></span>'
+f'<div style="display: flex; align-items: center; gap: 6px;">'
+f'<span class="badge-pill {ov.original_risk.value.lower()}">{ov.original_risk.value}</span>'
+f'<span style="color: #94a3b8;">➔</span>'
+f'<span class="badge-pill {ov.overridden_risk.value.lower()}">{ov.overridden_risk.value}</span></div></div>'
+f'<div style="font-size: 0.90rem; color: #f1f5f9; margin: 8px 0;">'
+f'<b>Officer Guiding Rationale:</b> <i>"{ov.override_reason}"</i></div>'
+f'<div style="font-size: 0.78rem; color: #94a3b8; display: flex; justify-content: space-between;">'
+f'<span>Verified by: <code>{ov.safety_officer_id}</code></span>'
+f'<span>Logged: {ov.timestamp} UTC</span></div></div>',
                 unsafe_allow_html=True,
             )
 
