@@ -110,6 +110,28 @@ class FrontendAgentService:
         self.storage = storage or SafetyStorage()
         self.few_shot_manager = FrontendFewShotManager(storage=self.storage)
 
+    def parse_pdf_document(self, pdf_source: Any, filename: str = "document.pdf") -> Dict[str, Any]:
+        """
+        Connects Person 1's parser component to extract text and structure
+        safety report entities from uploaded PDFs.
+        """
+        from person1_data_pipeline.parser import parse_pdf_report
+        return parse_pdf_report(pdf_source, filename=filename)
+
+    def batch_process_pdf_directory(self, directory_path: Optional[str] = None) -> int:
+        """
+        Executes Person 1's batch PDF directory processing pipeline.
+        """
+        from person1_data_pipeline.parser import process_pdf_directory
+        if not directory_path:
+            directory_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                "person1_data_pipeline",
+                "data",
+                "pdf_reports"
+            )
+        return process_pdf_directory(directory_path)
+
     def analyze_report(
         self,
         raw_text: str,

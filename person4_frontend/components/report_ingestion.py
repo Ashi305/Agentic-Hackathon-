@@ -102,7 +102,12 @@ def render_report_ingestion(agent: FrontendAgentService):
 
     ingestion_mode = st.radio(
         "Select Ingestion Modality:",
-        ["Structured Free-Text Narrative", "Radio / Voice Transcript Simulator", "Batch JSON File Ingestion"],
+        [
+            "Structured Free-Text Narrative",
+            "Radio / Voice Transcript Simulator",
+            "PDF Incident Report Ingestion (Person 1 Parser)",
+            "Batch JSON File Ingestion",
+        ],
         horizontal=True,
     )
 
@@ -231,7 +236,135 @@ def render_report_ingestion(agent: FrontendAgentService):
             )
 
     # -------------------------------------------------------------------------
-    # MODALITY 3: Batch JSON File Ingestion
+    # MODALITY 3: PDF Incident Report Ingestion (Person 1 Parser Component)
+    # -------------------------------------------------------------------------
+    elif ingestion_mode == "PDF Incident Report Ingestion (Person 1 Parser)":
+        st.markdown(
+            """
+            <div style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 14px;">
+                Direct integration with Person 1's automated PDF Document Ingestion Engine (<code style="color: #38bdf8;">person1_data_pipeline/parser.py</code>).
+                Extracts unstructured narrative text via PyPDF2 / pypdf, parses operational entities, and feeds them directly into the Precursor Reasoning Agent.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        source_tab = st.radio(
+            "Select PDF Input Source:",
+            ["Upload Incident PDF Document", "Select Pre-Loaded Industrial PDF (Person 1 Archive)"],
+            horizontal=True,
+        )
+
+        sample_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+            "person1_data_pipeline", "data", "pdf_reports"
+        )
+        sample_pdfs = []
+        if os.path.exists(sample_dir):
+            sample_pdfs = [f for f in sorted(os.listdir(sample_dir)) if f.lower().endswith(".pdf")]
+
+        if source_tab == "Select Pre-Loaded Industrial PDF (Person 1 Archive)":
+            if not sample_pdfs:
+                st.warning("No pre-loaded PDFs found in person1_data_pipeline/data/pdf_reports/.")
+            else:
+                selected_sample = st.selectbox(
+                    "Select Pre-Loaded PDF Incident Report from Warehouse:",
+                    sample_pdfs,
+                    format_func=lambda x: f"[PDF REPORT] {x.replace('_', ' ').replace('.pdf', '')}"
+                )
+                sample_path = os.path.join(sample_dir, selected_sample)
+
+                col_btn, col_info = st.columns([1, 2])
+                with col_btn:
+                    parse_now = st.button("Extract & Parse PDF Document", use_container_width=True)
+                with col_info:
+                    st.caption(f"Source File: <code>{selected_sample}</code>")
+
+                if parse_now or ("active_pdf_data" in st.session_state and st.session_state.get("active_pdf_name") == selected_sample):
+                    with st.spinner("Invoking Person 1 extract_text_from_pdf & parse_incident_text..."):
+                        parsed_meta = agent.parse_pdf_document(sample_path, filename=selected_sample)
+                        st.session_state["active_pdf_data"] = parsed_meta
+                        st.session_state["active_pdf_name"] = selected_sample
+
+        else:
+            uploaded_pdf = st.file_uploader("Upload an OSHA or Industrial Near-Miss PDF Document", type=["pdf"])
+            if uploaded_pdf is not None:
+                if st.session_state.get("active_pdf_name") != uploaded_pdf.name:
+                    with st.spinner(f"Person 1 Parser reading bytes from '{uploaded_pdf.name}'..."):
+                        parsed_meta = agent.parse_pdf_document(uploaded_pdf, filename=uploaded_pdf.name)
+                        st.session_state["active_pdf_data"] = parsed_meta
+                        st.session_state["active_pdf_name"] = uploaded_pdf.name
+
+        # Render parsed document inspection card & confirmation form
+        if "active_pdf_data" in st.session_state and st.session_state["active_pdf_data"]:
+            meta = st.session_state["active_pdf_data"]
+            pdf_raw_text = meta.get("raw_description", "")
+
+            st.markdown(
+                f"""
+                <div class="glass-panel" style="margin-top: 14px; border-left: 4px solid #38bdf8;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <div>
+                            <span style="font-size: 1.05rem; font-weight: 700; color: #f8fafc;">
+                                Document: {meta.get('source_file', 'Report.pdf')}
+                            </span>
+                            <div style="font-size: 0.80rem; color: #94a3b8; margin-top: 2px;">
+                                Engine: <b>Person 1 PyPDF2 Parser</b> | Characters Extracted: <b>{len(pdf_raw_text)}</b> | Status: <b style="color: #34d399;">Parsed Successfully</b>
+                            </div>
+                        </div>
+                        <span class="badge-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">
+                            Parser Ready
+                        </span>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            with st.form("pdf_inspection_form"):
+                st.markdown("<b style='color: #38bdf8;'>Extracted Safety Precursor Metadata:</b>", unsafe_allow_html=True)
+                col_p1, col_p2, col_p3 = st.columns(3)
+                with col_p1:
+                    pdf_dept = st.text_input("Extracted Department", value=meta.get("department", "General Operations"))
+                with col_p2:
+                    pdf_loc = st.text_input("Specific Location / Zone", value=meta.get("location_specific", "Facility Floor"))
+                with col_p3:
+                    pdf_equip = st.text_input("Equipment Involved", value=meta.get("equipment_involved", "Industrial Machinery"))
+
+                pdf_narrative = st.text_area(
+                    "Extracted Document Text / Observation Narrative:",
+                    value=pdf_raw_text,
+                    height=180,
+                )
+
+                submit_pdf = st.form_submit_button("Run Precursor Agent Analysis on PDF Content", use_container_width=True)
+
+            if submit_pdf:
+                if not pdf_narrative.strip():
+                    st.error("Cannot process an empty document narrative.")
+                else:
+                    _execute_agent_analysis(agent, pdf_narrative, pdf_dept, pdf_loc, equipment=pdf_equip)
+
+        # Batch Directory Processing Expander (Person 1 Feature)
+        with st.expander("Batch Directory Ingestion: Parse All PDFs in Archive"):
+            st.markdown(
+                """
+                <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 8px;">
+                    Executes <code>process_pdf_directory()</code> from Person 1's backend module across the <code>person1_data_pipeline/data/pdf_reports/</code> folder.
+                    All scanned PDF records are automatically structured and saved into the SQLite warehouse.
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            if st.button("Run Person 1 Batch PDF Pipeline", use_container_width=True):
+                with st.spinner("Iterating through PDF directory, extracting documents, and storing in warehouse..."):
+                    count = agent.batch_process_pdf_directory()
+                    st.success(f"Batch execution completed! Processed and cataloged {count} PDF report(s) in warehouse.")
+                    time.sleep(1)
+                    st.rerun()
+
+    # -------------------------------------------------------------------------
+    # MODALITY 4: Batch JSON File Ingestion
     # -------------------------------------------------------------------------
     elif ingestion_mode == "Batch JSON File Ingestion":
         st.markdown(

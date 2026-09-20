@@ -11,8 +11,14 @@ from .schema import (
     RiskOverride,
     EnrichedReport,
 )
-from .storage import SafetyStorage
+from .storage import SafetyStorage, save_enriched_report
 from .synthetic_generator import generate_synthetic_reports
+from .parser import (
+    extract_text_from_pdf,
+    parse_incident_text,
+    parse_pdf_report,
+    process_pdf_directory,
+)
 
 __all__ = [
     "RiskLevel",
@@ -23,5 +29,10 @@ __all__ = [
     "RiskOverride",
     "EnrichedReport",
     "SafetyStorage",
+    "save_enriched_report",
     "generate_synthetic_reports",
+    "extract_text_from_pdf",
+    "parse_incident_text",
+    "parse_pdf_report",
+    "process_pdf_directory",
 ]

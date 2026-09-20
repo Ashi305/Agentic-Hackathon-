@@ -363,3 +363,9 @@ class SafetyStorage:
         data = [json.loads(item.model_dump_json()) for item in enriched_list]
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
+
+
+def save_enriched_report(enriched: EnrichedReport) -> None:
+    """Convenience module-level function to persist an enriched report using the default SafetyStorage."""
+    storage = SafetyStorage()
+    storage.save_enriched_report(enriched)
